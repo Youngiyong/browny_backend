@@ -1,22 +1,41 @@
-const path = require("path");
+const path = require('path');
+const slsw = require('serverless-webpack');
+const nodeExternals = require('webpack-node-externals');
+
+const entries = {};
+
+Object.keys(slsw.lib.entries).forEach(
+  key => (entries[key] = ['./source-map-install.js', slsw.lib.entries[key]])
+);
 
 module.exports = {
-  entry: path.join(__dirname, "src/handler.ts"),
-  output: {
-    libraryTarget: "commonjs",
-    filename: "src/handler.ts",
-    path: path.resolve(__dirname, "dist")
+  mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
+  entry: entries,
+  // devtool: 'source-map',
+  resolve: {
+    modules: ['node_modules'],
+    extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
   },
+  output: {
+    libraryTarget: 'commonjs',
+    path: path.join(__dirname, '.webpack'),
+    filename: '[name].js'
+  },
+  target: 'node',
   module: {
     rules: [
+      // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
       {
         test: /\.tsx?$/,
-        loader: "ts-loader",
-        exclude: /node_modules/
+        loader: 'ts-loader',
+        options: {
+          transpileOnly: true
+        }
       }
     ]
   },
-  resolve: {
-    extensions: [".tsx", ".ts", ".js"]
+  externals: [nodeExternals()],
+  optimization: {
+    minimize: false
   }
 };
