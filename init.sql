@@ -14,8 +14,12 @@ CREATE DATABASE browny
   LC_CTYPE 'C'
   ENCODING 'UTF8'
   TEMPLATE template0
-  with owner browny
   ;
+
+'''
+Change Databse owner 
+'''
+ALTER DATABASE browny OWNER TO browny;
 
 
 '''
@@ -172,8 +176,8 @@ ALTER TABLE ONLY public.auth_email
 -- Name: auth_email auth_email_pkey; Type: CONSTRAINT; Schema: public; Owner: browny
 --
 
-ALTER TABLE ONLY public.email_auth
-    ADD CONSTRAINT email_auth_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.auth_email
+    ADD CONSTRAINT auth_email_pkey PRIMARY KEY (id);
 
 
 
