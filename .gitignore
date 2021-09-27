@@ -1,7 +1,7 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/webstorm,vim,node,dotenv
 # Edit at https://www.toptal.com/developers/gitignore?templates=webstorm,vim,node,dotenv
-
+ormconfig.json
 ### dotenv ###
 .idea
 ### Node ###
@@ -252,5 +252,5 @@ fabric.properties
 # CodeStream plugin
 # https://plugins.jetbrains.com/plugin/12206-codestream
 .idea/codestream.xml
-
+ornconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/webstorm,vim,node,dotenv
