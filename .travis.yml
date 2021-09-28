@@ -24,8 +24,6 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
-    secret_access_key: $AWS_SECRET_KEY
     script: yarn deploy
     on:
       branch: main
