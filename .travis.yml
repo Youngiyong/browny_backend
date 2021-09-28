@@ -28,7 +28,7 @@ deploy:
     secret_access_key: $AWS_SECRET_KEY
     region: "ap-northeast-2"
     bucket_name: "browny-deploy"  # S3 bucket name
-    script: npm run deploy
+    script: yarn deploy
     on:
       branch: main
 
