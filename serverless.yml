@@ -65,3 +65,20 @@ functions:
       - http:
           path: hello
           method: get
+
+# resources:
+#   Description: auth_email
+#   Resources:
+#     MyroMemberTable:
+#       Type: AWS::DynamoDB::Table
+#       Properties:
+#         TableName: auth_email
+#         AttributeDefinitions:
+#           - AttributeName: "id"
+#             AttributeType: "S"
+#         KeySchema:
+#           - AttributeName: "id"
+#             KeyType: HASH
+#         ProvisionedThroughput:
+#           ReadCapacityUnits: 1
+#           WriteCapacityUnits: 1
