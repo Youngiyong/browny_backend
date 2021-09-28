@@ -48,7 +48,6 @@ provider:
     subnetIds:
       - subnet-068eb19616780adb7 #public-subnet-a
       - subnet-0a5fe2e2a9acd001d #public-subnet-b
-
   # iamRoleStatements:
   #   - Effect: Allow
   #     Action:
