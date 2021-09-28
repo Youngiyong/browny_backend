@@ -17,7 +17,6 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: ap-northeast-2
-  accountId: "916928251356"
   lambdaHashingVersion: 20201221
   stage: ${opt:stage, 'dev'}
   deploymentBucket:
@@ -64,14 +63,19 @@ provider:
       - subnet-068eb19616780adb7 #public-subnet-a
       - subnet-0a5fe2e2a9acd001d #public-subnet-b
 
-  iam:
-    role:
-      name: ${self:custom.SERVICE_NAME}
-      # path:
-      statements:
-        - Effect: Allow
-          Action:
-            - "s3:*"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "sns:*"
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - "sqs:*"
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - "apigateway:*"
+      Resource: "*"
           Resource: "*"
 functions:
   hello:
