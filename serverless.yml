@@ -2,7 +2,7 @@ service: browny-backend
 plugins:
   - serverless-webpack
   - serverless-offline
-  
+variablesResolutionMode: 20210326
 frameworkVersion: '2'
 # env 파일 사용
 custom:
