@@ -17,6 +17,9 @@ notifications:
     rooms: sideplatform-browny:0sTfK3iF7RiQFNRSZM0BHMQ7
 # notifications:
 #   slack: sideplatform-browny:0sTfK3iF7RiQFNRSZM0BHMQ7
+script:
+  - yarn install
+
 deploy:
   - provider: script
     skip_cleanup: true
