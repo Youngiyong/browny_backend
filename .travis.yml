@@ -20,12 +20,10 @@ script:
 
 
 before_deploy:
-  - serverless config credentials --provider aws --key AKIA5K7JOYXOKHQTMSGG --secret 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
+  - serverless config credentials --provider aws --key AKIA5K7JOYXOPC54B7FE --secret 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
 
 deploy:
   - provider: script
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
     skip_cleanup: true
     script: yarn deploy
 
