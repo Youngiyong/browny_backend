@@ -20,12 +20,13 @@ notifications:
 script:
   - yarn install
   - yarn test
+
 deploy:
   - provider: script
     skip_cleanup: true
     script: npm run deploy
     on:
-      branch: master
+      branch: main
 
   # tags deploy to prod environment
   # - provider: script
