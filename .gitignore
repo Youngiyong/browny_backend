@@ -1,7 +1,6 @@
 
 # Created by https://www.toptal.com/developers/gitignore/api/webstorm,vim,node,dotenv
 # Edit at https://www.toptal.com/developers/gitignore?templates=webstorm,vim,node,dotenv
-ormconfig.json
 ### dotenv ###
 .idea
 ### Node ###
@@ -79,9 +78,6 @@ web_modules/
 # dotenv environment variables file
 .env.test
 .env.production
-.env
-.env.dev
-.env.prod
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
