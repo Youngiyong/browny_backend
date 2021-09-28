@@ -1,7 +1,6 @@
 language: node_js
 node_js:
   - "12"
-dist: bionic
 # for code analysis sonarqube
 git:
   depth: false
@@ -21,6 +20,9 @@ script:
   - yarn test
 
 
+before_deploy:
+  - serverless config credentials --provider aws --key AKIA5K7JOYXOKHQTMSGG --secret 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
+  
 deploy:
   - provider: script
     access_key_id: $AWS_ACCESS_KEY
