@@ -17,6 +17,7 @@ notifications:
 # notifications:
 #   slack: sideplatform-browny:0sTfK3iF7RiQFNRSZM0BHMQ7
 script:
+  - yarn install
   - yarn test
 
 
@@ -29,7 +30,7 @@ deploy:
     secret_access_key: $AWS_SECRET_KEY
     skip_cleanup: true
     script: yarn deploy
-    
+
     on:
       branch: main
 
