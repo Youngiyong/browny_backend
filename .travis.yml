@@ -12,11 +12,14 @@ notifications:
     on_failure: always # if there is a fail
     recipients:
       - browny9532@gmail.com
-  # slack:
-  #   on_success: always
-  #   rooms:
-  #   - 
-
+  slack:
+    on_success: always
+    rooms: sideplatform-browny:0sTfK3iF7RiQFNRSZM0BHMQ7
+# notifications:
+#   slack: sideplatform-browny:0sTfK3iF7RiQFNRSZM0BHMQ7
+script:
+  - yarn install
+  - yarn test
 deploy:
   - provider: script
     skip_cleanup: true

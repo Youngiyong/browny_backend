@@ -9,7 +9,7 @@ const hello: Handler = async (event: any, context: Context) => {
   const response: HelloResponse = {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'Hello World!',
+      message: 'Hello World2!',
     }),
   };
   return response;
