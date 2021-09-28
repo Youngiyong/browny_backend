@@ -24,10 +24,6 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
-    access_key_id: $AWS_ACCESS_KEY
-    secret_access_key: $AWS_SECRET_KEY
-    bucket: browny-backend-travis
-    region: ap-northeast-2
     script: npm run deploy
     on:
       branch: main
