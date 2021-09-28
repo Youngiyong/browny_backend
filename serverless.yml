@@ -48,19 +48,26 @@ provider:
     subnetIds:
       - subnet-068eb19616780adb7 #public-subnet-a
       - subnet-0a5fe2e2a9acd001d #public-subnet-b
-  # iamRoleStatements:
-  #   - Effect: Allow
-  #     Action:
-  #       - "sns:*"
-  #     Resource: "*"
-  #   - Effect: Allow
-  #     Action:
-  #       - "sqs:*"
-  #     Resource: "*"
-  #   - Effect: Allow
-  #     Action:
-  #       - "apigateway:*"
-  #     Resource: "*"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "s3:*"
+      Resource: "*"
+    # api.doc will call apigateway api
+    - Effect: Allow
+      Action:
+        - "apigateway:*"
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - "dynamodb:*"
+      Resource:
+        - "*"
+    - Effect: Allow
+      Action:
+        - "apigateway:*"
+      Resource: "*"
+
 functions:
   hello:
     handler: src/handler.hello
