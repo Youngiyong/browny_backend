@@ -21,6 +21,9 @@ script:
   - yarn install
   - yarn test
 
+before_deploy:
+  - yarn install
+
 deploy:
   - provider: script
     skip_cleanup: true
