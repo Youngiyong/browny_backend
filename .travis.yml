@@ -29,6 +29,7 @@ deploy:
     script: npm run deploy
     on:
       branch: main
+      
 
   # tags deploy to prod environment
   # - provider: script
