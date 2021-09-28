@@ -18,7 +18,6 @@ script:
   - yarn install
   - yarn test
 
-
 before_deploy:
   - serverless config credentials --provider aws --key AKIA5K7JOYXOPC54B7FE --secret 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
 
