@@ -1,7 +1,7 @@
 language: node_js
 node_js:
   - "12"
-
+dist: bionic
 # for code analysis sonarqube
 git:
   depth: false
@@ -21,14 +21,17 @@ script:
   - yarn install
   - yarn test
 
+
+
 deploy:
   - provider: script
     access_key_id: $AWS_ACCESS_KEY
     secret_access_key: $AWS_SECRET_KEY
     skip_cleanup: true
-    script: npm run deploy
+    script: yarn deploy
     on:
       branch: main
+
 
   # tags deploy to prod environment
   # - provider: script
