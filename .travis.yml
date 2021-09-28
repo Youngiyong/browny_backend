@@ -27,7 +27,9 @@ deploy:
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
     secret_access_key: $AWS_SECRET_KEY
     region: "ap-northeast-2"
-    script: yarn deploy
+    script: 
+      - yarn install
+      - yarn deploy
     on:
       branch: main
 
