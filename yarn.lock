@@ -7920,9 +7920,9 @@ serverless-webpack@^5.3.1:
   optionalDependencies:
     ts-node ">= 8.3.0"
 
-serverless@^2.44.0:
+serverless@^2.32.0:
   version "2.60.0"
-  resolved "https://registry.npmjs.org/serverless/-/serverless-2.60.0.tgz"
+  resolved "https://registry.yarnpkg.com/serverless/-/serverless-2.60.0.tgz#fc4b831edcf5d8e3746fac336a72098fbaca7762"
   integrity sha512-AlAFCf1jrnDxVsJlYO3YrTFrmbMLP9FqzQQI2yJ4s75td5k6u8reTTNuXwC9Y68yyCX5qv1VsOlYnv7VzQsNlA==
   dependencies:
     "@serverless/cli" "^1.5.2"
