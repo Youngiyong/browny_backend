@@ -18,17 +18,15 @@ notifications:
 # notifications:
 #   slack: sideplatform-browny:0sTfK3iF7RiQFNRSZM0BHMQ7
 script:
-  - yarn install
-  - yarn test
+  - npm install
+  - npm run test
 
 deploy:
   - provider: script
     skip_cleanup: true
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
     secret_access_key: $AWS_SECRET_KEY
-    region: "ap-northeast-2"
-    bucket_name: "browny-deploy"  # S3 bucket name
-    script: yarn deploy
+    script: npm run deploy
     on:
       branch: main
 
