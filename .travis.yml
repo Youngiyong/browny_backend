@@ -14,8 +14,6 @@ notifications:
   slack:
     on_success: always
     rooms: sideplatform-browny:0sTfK3iF7RiQFNRSZM0BHMQ7
-# notifications:
-#   slack: sideplatform-browny:0sTfK3iF7RiQFNRSZM0BHMQ7
 script:
   - yarn install
   - yarn test
@@ -33,11 +31,3 @@ deploy:
 
     on:
       branch: main
-
-
-  # tags deploy to prod environment
-  # - provider: script
-  #   skip_cleanup: true
-  #   script: npm run deploy:prod
-  #   on:
-  #     tags: true
