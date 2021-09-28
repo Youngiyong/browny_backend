@@ -4,7 +4,6 @@ node_js:
 # for code analysis sonarqube
 git:
   depth: false
-
 notifications:
   email:
     on_success: change # only if status change from fail to success
