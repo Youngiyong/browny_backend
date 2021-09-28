@@ -18,18 +18,18 @@ notifications:
 # notifications:
 #   slack: sideplatform-browny:0sTfK3iF7RiQFNRSZM0BHMQ7
 script:
-  - npm install
-  - npm run test
+  - yarn install
+  - yarn test
 
 deploy:
   - provider: script
     skip_cleanup: true
     access_key_id: $AWS_ACCESS_KEY # declared in Travis repo settings
     secret_access_key: $AWS_SECRET_KEY
-    script: npm run deploy
+    script: yarn deploy
     on:
       branch: main
-      
+
 
   # tags deploy to prod environment
   # - provider: script
