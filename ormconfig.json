@@ -1,0 +1,23 @@
+{
+   "type": "postgres",
+   "host": "brwony.cwb7hmxfs0pp.ap-northeast-2.rds.amazonaws.com",
+   "port": 5432,
+   "username": "browny",
+   "password": "wZ8FWmtbLaeqefw5UZw3JrNdUDVNAbyt",
+   "database": "browny",
+   "synchronize": false,
+   "logging": true,
+   "uuidExtension": true,
+   "keepConnectionAlive": true,
+   "entities": [
+      "src/entity/**/*.ts"
+   ],
+   "migrations": [
+      "src/migration/**/*.ts"
+   ],
+   "subscribers": [
+      "src/subscriber/**/*.ts"
+   ],
+   "cli": {
+   }
+}
