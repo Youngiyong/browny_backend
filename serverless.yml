@@ -76,7 +76,6 @@ provider:
       Action:
         - "apigateway:*"
       Resource: "*"
-          Resource: "*"
 functions:
   hello:
     handler: src/handler.hello
