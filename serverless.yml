@@ -2,7 +2,7 @@ service: browny-backend
 plugins:
   - serverless-webpack
   - serverless-offline
-
+configValidationMode: error
 frameworkVersion: '2'
 # env 파일 사용
 custom:
