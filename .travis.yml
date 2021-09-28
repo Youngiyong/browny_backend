@@ -25,8 +25,8 @@ script:
 
 deploy:
   - provider: script
-    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
-    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
     skip_cleanup: true
     script: yarn deploy
     on:

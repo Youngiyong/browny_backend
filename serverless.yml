@@ -25,6 +25,7 @@ provider:
   #   maxPreviousDeploymentArtifacts: 5 # On every deployment the framework prunes the bucket to remove artifacts older than this limit. The default is 5
 
 
+
   environment:
     DEBUG: true
     # https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/node-reusing-connections.html
