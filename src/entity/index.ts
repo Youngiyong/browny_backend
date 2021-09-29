@@ -1,13 +1,9 @@
-// import AuthToken from './AuthToken';
-// import EmailAuth from './EmailAuth';
-// import User from './User';
-// import UserProfile from './UserProfile';
+import User from './User';
+import UserProfile from './UserProfile';
 
-// const entities = [
-//   AuthToken,
-//   EmailAuth,
-//   User,
-//   UserProfile,
-// ];
+const entities = [
+  User,
+  UserProfile
+];
 
-// export default entities;
+export default entities;

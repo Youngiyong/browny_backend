@@ -2,40 +2,45 @@ const path = require('path');
 const slsw = require('serverless-webpack');
 const nodeExternals = require('webpack-node-externals');
 
-const entries = {};
-
-Object.keys(slsw.lib.entries).forEach(
-  key => (entries[key] = ['./source-map-install.js', slsw.lib.entries[key]])
-);
-
 module.exports = {
+  context: __dirname,
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
-  entry: entries,
-  // devtool: 'source-map',
+  entry: slsw.lib.entries,
+  devtool: slsw.lib.webpack.isLocal ? 'eval-cheap-module-source-map' : 'source-map',
   resolve: {
-    modules: ['node_modules'],
-    extensions: ['.js', '.jsx', '.json', '.ts', '.tsx']
+    extensions: ['.mjs', '.json', '.ts'],
+    symlinks: false,
+    cacheWithContext: false,
   },
   output: {
     libraryTarget: 'commonjs',
     path: path.join(__dirname, '.webpack'),
-    filename: '[name].js'
+    filename: '[name].js',
   },
   target: 'node',
+  externals: [nodeExternals()],
   module: {
     rules: [
       // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
       {
-        test: /\.tsx?$/,
+        test: /\.(tsx?)$/,
         loader: 'ts-loader',
+        exclude: [
+          [
+            path.resolve(__dirname, 'node_modules'),
+            path.resolve(__dirname, '.serverless'),
+            path.resolve(__dirname, '.webpack'),
+          ],
+        ],
         options: {
-          transpileOnly: true
-        }
-      }
-    ]
+          transpileOnly: true,
+          experimentalWatchApi: true,
+        },
+      },
+    ],
   },
-  externals: [nodeExternals()],
+  plugins: [],
   optimization: {
     minimize: false
-  }
+  },
 };

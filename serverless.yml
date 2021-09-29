@@ -33,10 +33,12 @@ provider:
     TZ: "Asia/Seoul"
 
     # 리소스 설정
+    RDS_TYPE: postgres
     RDS_PORT: 5432
-    RDS_DATABASE: browny
     RDS_USERNAME: browny
-    RDS_PASSWORD: rds.com
+    RDS_DATABASE: browny
+    RDS_HOSTNAME: brwony.rds.amazonaws.com
+    RDS_PASSWORD: secretkey
     # S3_AWS_ACCESS_KEY_ID: ${env:S3_AWS_ACCESS_KEY_ID}
     # S3_AWS_SECRET_ACCESS_KEY: ${env:S3_AWS_SECRET_ACCESS_KEY}
     # GOOGLE_CLIENT_ID: ${env:GOOGLE_CLIENT_ID}
@@ -67,15 +69,14 @@ provider:
       Action:
         - "apigateway:*"
       Resource: "*"
-
 functions:
-  hello:
+  hellofunction:
     handler: src/handler.hello
     events:
       - http:
           path: hello
           method: get
-  PostUser:
+  createuser:
     handler: src/routes/v1/users/post.run
     description: "회원 등록 API"
     events:
@@ -87,7 +88,7 @@ functions:
             origin: "*"
             headers: "*"
           private: false
-  GetUser:
+  getuser:
     handler: src/routes/v1/users/get.run
     description: "회원 조회 API"
     events:
