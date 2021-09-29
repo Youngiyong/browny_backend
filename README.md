@@ -6,18 +6,17 @@
 ![Architecture](browny.drawio.png)
 
 ## Preparation
-```
-install node 12
 
-git clone https://github.com/Browny9532/browny_backend.git
+- install node 12
 
-yarn global add serverless
+- git clone https://github.com/Browny9532/browny_backend.git
 
-serverless config credentials --provider aws --key [aws access key] --secret [aws secret key]
+- yarn global add serverless
 
-yarn install
+- serverless config credentials --provider aws --key [aws access key] --secret [aws secret key]
 
-```
+- yarn install
+
 
 ### Development
 #### deployment
