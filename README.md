@@ -13,7 +13,7 @@ git clone https://github.com/Browny9532/browny_backend.git
 
 yarn global add serverless
 
-serverless config credentials --provider aws --key AKIAYXRAQCT343VNATEN --secret lFBRqXEfq/ly168JOkRsyGF/tJbiDSjLZgacvQw8/e
+serverless config credentials --provider aws --key [aws access key] --secret [aws secret key]
 
 yarn install
 
