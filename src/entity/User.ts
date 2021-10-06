@@ -9,38 +9,51 @@ import { Entity,
     getRepository,
     OneToOne
   } from 'typeorm';
+import { generateAccessToken, generateRefreshToken } from '../lib/encrypt';
 
-  import UserProfile from './UserProfile';
+import UserProfile from './UserProfile';
   
-  @Entity('users', {
-    synchronize: false
-  })
+@Entity('users', {
+  synchronize: false
+})
   
-  export default class User {
-    @PrimaryGeneratedColumn('uuid')
-    id!: string;
+export default class User {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
   
-    @Index()
-    @Column({ unique: true, length: 255 })
-    username!: string;
+  @Index()
+  @Column({ unique: true, length: 255 })
+  username!: string;
   
-    @Index()
-    @Column({ unique: true, length: 255, nullable: true, type: 'varchar' })
-    email!: string | null;
+  @Index()
+  @Column({ unique: true, length: 255, nullable: true, type: 'varchar' })
+  email!: string | null;
   
-    @Column('timestampz')
-    @CreateDateColumn()
-    created_at!: Date;
+  @Column('timestampz')
+  @CreateDateColumn()
+  created_at!: Date;
   
-    @Column('timestamptz')
-    @UpdateDateColumn()
-    updated_at!: Date;
+  @Column('timestamptz')
+  @UpdateDateColumn()
+  updated_at!: Date;
   
-    @Column({ default: false })
-    is_certified!: boolean;
+  @Column({ default: false })
+  is_certified!: boolean;
   
-    @OneToOne(type => UserProfile, profile => profile.user)
-    profile!: UserProfile;
-  
+  @OneToOne(type => UserProfile, profile => profile.user)
+  profile!: UserProfile;
+
+  async generateUserToken() {
+    // refresh token is valid for 30days
+    const accessToken = await generateAccessToken(this.id);
+    const refreshToken = await generateRefreshToken(this.id);
+    
+    return {
+      refreshToken,
+      accessToken
+    };
   }
+  
+
+}
   
