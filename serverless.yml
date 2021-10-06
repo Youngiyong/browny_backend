@@ -37,9 +37,9 @@ provider:
     RDS_PORT: 5432
     RDS_USERNAME: browny
     RDS_DATABASE: browny
-    RDS_HOSTNAME: brwony.cwb7hmxfs0pp.ap-northeast-2.rds.amazonaws.com
-    RDS_PASSWORD: wZ8FWmtbLaeqefw5UZw3JrNdUDVNAbyt
-    JWT_SECRET_KEY: 0uucEqrMmfuCCouYQEY8Th75TW4uZl
+    RDS_HOSTNAME: 1234
+    RDS_PASSWORD: 1234
+    JWT_SECRET_KEY: 1234
     # S3_AWS_ACCESS_KEY_ID: ${env:S3_AWS_ACCESS_KEY_ID}
     # S3_AWS_SECRET_ACCESS_KEY: ${env:S3_AWS_SECRET_ACCESS_KEY}
     GOOGLE_CLIENT_ID: clientId
