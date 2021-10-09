@@ -9,7 +9,7 @@ import { Entity,
     getRepository,
     OneToOne
   } from 'typeorm';
-import { generateAccessToken, generateRefreshToken } from '../lib/encrypt';
+import { generateAccessToken, generateRefreshToken } from '../lib/token';
 
 import UserProfile from './UserProfile';
   
@@ -47,7 +47,6 @@ export default class User {
     // refresh token is valid for 30days
     const accessToken = await generateAccessToken(this.id);
     const refreshToken = await generateRefreshToken(this.id);
-    
     return {
       refreshToken,
       accessToken

@@ -1,6 +1,6 @@
 import { Context, Callback, Handler } from 'aws-lambda';
 import * as jwt from 'jsonwebtoken';
-import { splitByDelimiter } from '../encrypt';
+import { splitByDelimiter } from '../token';
 
 export const run: Handler = async (
   event: any,

@@ -1,8 +1,9 @@
 import axios from 'axios';
-import Octokit from '@octokit/rest';
+import { Octokit } from '@octokit/rest';
 
 export const GithubRedirectUrl = 
-"" 
+    `https://github.com/login/oauth/authorize?scope=user:email&client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${process.env.GITHUB_REDIRECT_PATH}`;
+ 
 
 type GetGithubAccessTokenParams = {
   code: string;

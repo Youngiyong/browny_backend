@@ -8,7 +8,7 @@ export const run: Handler = async (event: any, context: Context, callback: Callb
 	context.callbackWaitsForEmptyEventLoop = false;
 	console.log("event",event);
 
-	const provider  = event.path.provider
+	const provider  = event.pathParameters.provider
 	return await callbackAuthEvent(event, provider);
 
 

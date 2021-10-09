@@ -1,6 +1,6 @@
 import { Context, Callback, Handler } from 'aws-lambda';
 import * as jwt from "jsonwebtoken";
-import { splitByDelimiter, decodeBase64 } from '../../../lib/encrypt';
+import { splitByDelimiter, decodeBase64 } from '../../../lib/token';
 
 export const run: Handler = async (event: any, context: Context, callback: Callback) => {
 	context.callbackWaitsForEmptyEventLoop = false;

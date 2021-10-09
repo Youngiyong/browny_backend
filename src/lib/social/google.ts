@@ -11,8 +11,8 @@ type GetGoogleAccessTokenParams = {
 const oauth2Client = new google.auth.OAuth2(
      process.env.GOOGLE_CLIENT_ID,
      process.env.GOOGLE_CLIENT_SECRET,
-    "callback_Url"
-     );
+    'https://6google/callback'
+);
 
 export const GoogleRedirectUrl = oauth2Client.generateAuthUrl({
   access_type: 'offline',
@@ -45,7 +45,9 @@ export async function getGoogleAccessToken({
     clientSecret,
     redirectUri
   );
+  console.log(oauth2Client)
   const { tokens } = await oauth2Client.getToken(code);
+  console.log(tokens)
   if (!tokens.access_token)
     throw new Error('Failed to retrieve google access token');
   return tokens.access_token;
