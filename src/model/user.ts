@@ -7,18 +7,95 @@ import UserProfile from '../entity/UserProfile';
 import SocialAccount from '../entity/SocialAccount';
 import { generateAccessToken, setTokenCookie } from '../lib/token';
 import { APIGatewayProxyResponse } from "../model/type"
+import {  BrownyMsgResponse } from "../lib/response" 
+import {  decryptPassword, hashPassword } from '../lib/hash';
 
-//수정 필요
-export async function findUserById(userId: string) {
+export async function loginBrowny(event: any) {
   const connection = new Database();
   await connection.getConnection();
+  const body = JSON.parse(event.body);
   const user = await getRepository(User)
-    .createQueryBuilder('user')
-    .innerJoinAndSelect('user.profile', 'profile')
-    .where('user.id = :id', { id: userId })
-    .getOne();
-  console.log(user);
-  return user;
+              .createQueryBuilder('user')
+              .addSelect("user.password")
+              .innerJoinAndSelect('user.profile', 'profile')
+              .where('user.email = :email', { email: body.email })
+              .getOne();
+              
+  const decryptPasswd = decryptPassword(user.password, body.password)
+  if(!decryptPasswd) return BrownyMsgResponse(400, "비밀번호가 일치하지 않습니다.")
+  console.log(user)
+  const tokens = await user.generateUserToken();
+  const cookies = setTokenCookie(tokens)
+  const response: APIGatewayProxyResponse = {
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*', // Required for CORS support to work
+          'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
+        },
+        multiValueHeaders: {
+          'Set-Cookie': [ cookies.access_token, cookies.refresh_token ] 
+        },
+        body: JSON.stringify({
+          data : {
+            id: user.id,
+            email: user.email,
+            username: user.username,
+            profile: {
+                id: user.profile.id,
+                name: user.profile.name,
+                thumbnail: user.profile.thumbnail
+            }
+          }
+        })
+    }
+    return response
+}
+
+export async function joinMemberShip(event: any) {
+  const connection = new Database();
+  await connection.getConnection();
+  const userRepo = getRepository(User);
+  const body = JSON.parse(event.body)
+  
+  if(body.password !== body.repeat_password){
+    return BrownyMsgResponse(400, "비밀번호가 같지 않습니다. 다시 확인해주세요.")
+  }
+
+  const user = await userRepo.findOne({
+    where: {
+      email: body.email,
+    },
+  });
+  
+  if(user){
+    return BrownyMsgResponse(400, "이메일이 이미 존재합니다. 비밀번호 찾기 해주세요.")
+  }
+
+  const queryRunner = await getConnection().createQueryRunner();
+  await queryRunner.startTransaction();
+  try {
+    const userRepository = getRepository(User);
+    const user = new User();
+    const hashPasswd = await hashPassword(body.password)
+    user.email = body.email;
+    user.password = hashPasswd
+    await userRepository.save(user);
+
+    const userProfileRepository = getRepository(UserProfile);
+    const userprofile = new UserProfile();
+    
+    userprofile.fk_user_id = user.id;
+    await userProfileRepository.save(userprofile);
+    await queryRunner.commitTransaction();
+
+    return BrownyMsgResponse(200, "Success");
+  } catch (err) {
+    await queryRunner.rollbackTransaction();
+    throw new Error("Invalid Error Message:"+ err)
+  } finally {
+    await queryRunner.release();
+  }
+  
 }
 
 export async function createSocialAccount(params: {
@@ -154,6 +231,57 @@ export async function getSocialAccount(params: {
   console.log(response)
 
   return response
+}
+
+export async function updateProfile(user_id: string, body: any){
+  const connection = new Database();
+  await connection.getConnection();
+  
+  const userRepo = getRepository(UserProfile);
+  const userProfile = await userRepo.findOne({
+    where: {
+      fk_user_id: user_id
+    },
+  })
+  if(userProfile){
+
+    for (const [key, value] of Object.entries(body)) {
+      userProfile[key] = value;
+    }
+    userProfile.updated_at = new Date();
+    await userRepo.save(userProfile)
+    const response = {
+      data : userProfile
+    }
+    return response
+  } else {
+    throw new Error("user is not exist")
+  }
+}
+
+export async function updateProfileThumnail(user_id: string, uploadPath: string| null){
+  const connection = new Database();
+  await connection.getConnection();
+  
+  const userRepo = getRepository(UserProfile);
+  console.log(user_id, uploadPath)
+  const userProfile = await userRepo.findOne({
+    where: {
+      fk_user_id: user_id
+    },
+  })
+  
+  if(userProfile){
+    userProfile.thumbnail = uploadPath
+    userProfile.updated_at = new Date();
+    await userRepo.save(userProfile);
+    const response = {
+          data : userProfile
+    }
+    return response
+  } else {
+    throw new Error("user is not exist")
+  }
 }
 
 //수정 필요

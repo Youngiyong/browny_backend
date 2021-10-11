@@ -21,6 +21,9 @@ export default class UserProfile {
   @Column({ length: 255 })
   name!: string;
 
+  @Column({ length: 255 })
+  description!: string;
+
   @Column({ length: 255, nullable: true, type: 'varchar' })
   thumbnail!: string | null;
 

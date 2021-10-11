@@ -206,3 +206,11 @@ export async function refreshTokenAuthEvent(event: APIGatewayPostRequest) {
       throw new Error("Invalid Error:"+ err)
     }
 }
+
+
+
+// const users = await connection.getRepository(User)
+//     .createQueryBuilder()
+//     .select("user.id", "id")
+//     .addSelect("user.password")
+//     .getMany();

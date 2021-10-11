@@ -1,23 +1,24 @@
-import { Handler } from 'aws-lambda';
+import { Context, Callback, Handler } from 'aws-lambda';
+import { updateProfileThumnail, updateProfile } from '../../../model/user';
 
 /**
- *  프로필 이미지
+ *  프로필 이미지 삭제
  */
-export const modifyProfileImage: Handler = (event, context, callback) => {
-  // ?
+export const deleteProfileImage: Handler = async (event: any, context: Context, callback: Callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
+  const user_id = event.path.user_id;
+  const uploadPath = null;
+  return await updateProfileThumnail(user_id, uploadPath)
 };
 
-/**
- *  프로필 이름
- */
-export const modifyProfileName: Handler = (event, context, callback) => {
-  context.callbackWaitsForEmptyEventLoop = false;
-};
 
 /**
- *  프로필 소개
+ *  프로필 수정
  */
-export const modifyProfileDescription: Handler = (event, context, callback) => {
+export const putProfile: Handler = async (event: any, context: Context, callback: Callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
+  const user_id = event.path.user_id;
+  const body = event.body
+  return await updateProfile(user_id, body)
 };
+

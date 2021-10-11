@@ -12,7 +12,7 @@ import { Entity,
 import { generateAccessToken, generateRefreshToken } from '../lib/token';
 
 import UserProfile from './UserProfile';
-  
+
 @Entity('users', {
   synchronize: false
 })
@@ -29,6 +29,9 @@ export default class User {
   @Column({ unique: true, length: 255, nullable: true, type: 'varchar' })
   email!: string | null;
   
+  @Column({select: false, length: 255, nullable: true, type: 'varchar' })
+  password!: string;
+
   @Column('timestampz')
   @CreateDateColumn()
   created_at!: Date;
