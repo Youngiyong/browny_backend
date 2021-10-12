@@ -1,14 +1,37 @@
 import { getConnection, getRepository } from 'typeorm';
 import Database from '../database';
-import { requestPostUser } from './type';
+import { APIGatewayProxyMsgResponse, requestPostUser } from './type';
 import { SocialProvider } from '../lib/social';
 import User from '../entity/User';
 import UserProfile from '../entity/UserProfile';
 import SocialAccount from '../entity/SocialAccount';
 import { generateAccessToken, setTokenCookie } from '../lib/token';
 import { APIGatewayProxyResponse } from "../model/type"
-import {  BrownyMsgResponse } from "../lib/response" 
+import {  BrownyCreateResponse, BrownyMsgResponse } from "../lib/response" 
 import {  decryptPassword, hashPassword } from '../lib/hash';
+import { createEmailCode, findCodeByEmail } from './email';
+
+export async function logoutBrowny() {
+  const cookies = {
+    access_token : "",
+    refresh_token : ""
+  }
+
+  const response: APIGatewayProxyMsgResponse = {
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*', // Required for CORS support to work
+          'Access-Control-Allow-Credentials': true, // Required for cookies, authorization headers with HTTPS
+        },
+        multiValueHeaders: {
+          'Set-Cookie': [ cookies.access_token, cookies.refresh_token ] 
+        },
+        msg: JSON.stringify("Cookie Clear Success")
+  }
+
+  return response
+  
+}
 
 export async function loginBrowny(event: any) {
   const connection = new Database();
@@ -51,7 +74,44 @@ export async function loginBrowny(event: any) {
     return response
 }
 
-export async function joinMemberShip(event: any) {
+export async function joinMemberShipAfterEmailAuth(payload: any, user_temp: any){
+    const connection = new Database();
+    await connection.getConnection();
+    const queryRunner = await getConnection().createQueryRunner();
+    await queryRunner.startTransaction();
+
+  try{
+
+    const is_user = await getRepository(User)
+                    .createQueryBuilder('user')
+                    .where('user.email = :email', { email: payload.email })
+                    .getOne();
+
+    if(is_user){
+        return BrownyMsgResponse(400, "이미 존재하는 사용자라 회원가입 진행이 불가합니다.")
+    }
+    
+      const user = new User();
+      user.email = user_temp.email
+      user.password = hashPassword(user_temp.password)
+      user.is_certified = true
+      const userRepo = getRepository(User);
+
+      const userProfileRepo= getRepository(UserProfile);
+      await userRepo.save(user);
+
+      const userprofile = new UserProfile();
+      userprofile.fk_user_id = user.id
+      await userProfileRepo.save(userprofile)
+
+      return BrownyCreateResponse(200, "회원가입 성공")
+
+  } catch (e) {
+    throw new Error("Invalid Request Error:"+ e)
+  }
+}
+
+export async function joinMemberShipBeforeEmailAuth(event: any) {
   const connection = new Database();
   await connection.getConnection();
   const userRepo = getRepository(User);
@@ -68,34 +128,10 @@ export async function joinMemberShip(event: any) {
   });
   
   if(user){
-    return BrownyMsgResponse(400, "이메일이 이미 존재합니다. 비밀번호 찾기 해주세요.")
+    return BrownyMsgResponse(400, "이메일이 이미 존재합니다. 비밀번호 찾기로 확인해보세요!")
   }
 
-  const queryRunner = await getConnection().createQueryRunner();
-  await queryRunner.startTransaction();
-  try {
-    const userRepository = getRepository(User);
-    const user = new User();
-    const hashPasswd = await hashPassword(body.password)
-    user.email = body.email;
-    user.password = hashPasswd
-    await userRepository.save(user);
-
-    const userProfileRepository = getRepository(UserProfile);
-    const userprofile = new UserProfile();
-    
-    userprofile.fk_user_id = user.id;
-    await userProfileRepository.save(userprofile);
-    await queryRunner.commitTransaction();
-
-    return BrownyMsgResponse(200, "Success");
-  } catch (err) {
-    await queryRunner.rollbackTransaction();
-    throw new Error("Invalid Error Message:"+ err)
-  } finally {
-    await queryRunner.release();
-  }
-  
+  return await createEmailCode(body)
 }
 
 export async function createSocialAccount(params: {
@@ -313,7 +349,3 @@ export async function createUser(payload: requestPostUser) {
     await queryRunner.release();
   }
 }
-
-export const modifyProfileImage = async () => {
-  const connection = new Database();
-};

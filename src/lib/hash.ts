@@ -1,6 +1,12 @@
 import crypto from 'crypto-js'
+import { randomBytes } from 'crypto';
 
 const HASH_KEY  = process.env.HASH_KEY;
+
+
+export function randomEmailCode(){
+    return randomBytes(6).toString('hex');
+}
 
 export function hashPassword(password: string) {
     const hashed = crypto.AES.encrypt(JSON.stringify(password), HASH_KEY).toString();

@@ -8,9 +8,8 @@ import {
 } from '../lib/social/facebook';
 import { getKakaoAccessToken, getKakaoProfile } from '../lib/social/kakao';
 import { APIGatewayPostRequest, APIGatewayProxyResponse } from './type';
-import * as jwt from 'jsonwebtoken';
 import { setTokenCookie, verifyRefreshToken } from '../lib/token';
-import { Connection, getConnection, getRepository } from 'typeorm';
+import { getConnection, getRepository } from 'typeorm';
 import Database from '../database';
 import User from '../entity/User';
 
@@ -206,11 +205,3 @@ export async function refreshTokenAuthEvent(event: APIGatewayPostRequest) {
       throw new Error("Invalid Error:"+ err)
     }
 }
-
-
-
-// const users = await connection.getRepository(User)
-//     .createQueryBuilder()
-//     .select("user.id", "id")
-//     .addSelect("user.password")
-//     .getMany();

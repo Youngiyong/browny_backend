@@ -5,6 +5,14 @@ export type requestPostUser = {
   };
 };
 
+export interface APIGatewayProxyMsgResponse {
+  statusCode: number;
+  multiValueHeaders?: {}
+  headers?: {};
+  msg: string;
+}
+
+
 export interface APIGatewayProxyResponse {
   statusCode: number;
   multiValueHeaders?: {}
