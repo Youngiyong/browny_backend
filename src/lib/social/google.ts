@@ -10,8 +10,8 @@ type GetGoogleAccessTokenParams = {
 
 const oauth2Client = new google.auth.OAuth2(
      process.env.GOOGLE_CLIENT_ID,
-     process.env.GOOGLE_CLIENT_SECRET,
-    'https://l1c6u7qeo6.execute-api.ap-northeast-2.amazonaws.com/dev/v1/auth/google/callback'
+     process.env.GOOGLE_CLIENT_SECRET
+     "http://example.com",
 );
 
 export const GoogleRedirectUrl = oauth2Client.generateAuthUrl({
