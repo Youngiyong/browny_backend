@@ -263,6 +263,50 @@ refresh:
             origin: "*"
             headers: "*"
           private: false
+  getUserFollowsAPI:
+    handler: src/routes/v1/users/follow.getUserFollowsAPI
+    events:
+      - http:
+          method: get
+          path: v1/users/{user_id}/follows
+          authorizer: auth
+          cors:
+            origin: "*"
+            headers: "*"
+          private: false
+  getUserFollowersAPI:
+    handler: src/routes/v1/users/follow.getUserFollowersAPI
+    events:
+      - http:
+          method: get
+          path: v1/users/{user_id}/followers
+          authorizer: auth
+          cors:
+            origin: "*"
+            headers: "*"
+          private: false
+  postUserFollowAPI:
+    handler: src/routes/v1/users/follow.postUserFollowAPI
+    events:
+      - http:
+          method: post
+          path: v1/users/follows
+          authorizer: auth
+          cors:
+            origin: "*"
+            headers: "*"
+          private: false
+  deleteUserFollowAPI:
+    handler: src/routes/v1/users/follow.deleteUserFollowAPI
+    events:
+      - http:
+          method: delete
+          path: v1/users/{user_id}/follows/{user_follow_id}
+          authorizer: auth
+          cors:
+            origin: "*"
+            headers: "*"
+          private: false
 resources:
   Description: email_auth
   Resources:
