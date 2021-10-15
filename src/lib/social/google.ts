@@ -11,7 +11,7 @@ type GetGoogleAccessTokenParams = {
 const oauth2Client = new google.auth.OAuth2(
      process.env.GOOGLE_CLIENT_ID,
      process.env.GOOGLE_CLIENT_SECRET,
-     "http://localhost:8000/auth/google/callback",
+     process.env.GOOGLE_REDIRECT_PATH
 );
 
 export const GoogleRedirectUrl = oauth2Client.generateAuthUrl({

@@ -1,4 +1,5 @@
 import * as jwt from 'jsonwebtoken';
+import { BrownyMsgResponse } from './response';
 
 export function setTokenCookie(
     tokens: { accessToken: string; refreshToken: string }
@@ -47,3 +48,11 @@ export const splitByDelimiter = (data: string, delim: string) => {
 
 export const decodeBase64 = (input: string) =>
   Buffer.from(input, 'base64').toString('utf8');
+
+
+export const verifyAccessToken = (event: string) => {
+  const [type, token] = splitByDelimiter(event.multiValueHeaders.Authorization[0], ' ');
+  const user = jwt.verify(token, process.env.JWT_SECRET_KEY as string);
+
+  return user.sub==="access_token" ? user.id : undefined
+}

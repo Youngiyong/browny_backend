@@ -7,9 +7,11 @@ import { Entity,
     CreateDateColumn,
     UpdateDateColumn,
     getRepository,
-    OneToOne
+    OneToOne,
+    OneToMany
   } from 'typeorm';
 import { generateAccessToken, generateRefreshToken } from '../lib/token';
+import UserFollow from './UserFollow';
 
 import UserProfile from './UserProfile';
 
@@ -45,6 +47,9 @@ export default class User {
   
   @OneToOne(type => UserProfile, profile => profile.user)
   profile!: UserProfile;
+
+  @OneToMany(type => UserFollow, follow => follow.user)
+  follow!: UserFollow;
 
   async generateUserToken() {
     // refresh token is valid for 30days

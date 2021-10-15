@@ -25,11 +25,9 @@ import {
     @Column('uuid')
     fk_follow_user_id!: string;
 
-    @OneToOne(type => User)
     @JoinColumn({ name: 'fk_user_id' })
     user!: User;
 
-    @OneToOne(type => User)
     @JoinColumn({ name: 'fk_user_id' })
     follow_user!: User;
   }

@@ -1,5 +1,7 @@
 
 import { Context, Callback, Handler } from 'aws-lambda';
+import { BrownyMsgResponse } from '../../../lib/response';
+import { verifyAccessToken } from '../../../lib/token';
 import { createUserFollow, deleteUserFollow, getUserFollows, getUserFollowers } from '../../../model/userfollow';
 
 /**
@@ -7,7 +9,8 @@ import { createUserFollow, deleteUserFollow, getUserFollows, getUserFollowers } 
  */
 export const postUserFollowAPI: Handler = async (event: any, context: Context, callback: Callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
-  return await createUserFollow(event)
+  const user_id =  verifyAccessToken(event);
+  return user_id ? createUserFollow(event, user_id): BrownyMsgResponse(400, 'Invalid Access token Request');
 };
 
 /**
@@ -15,7 +18,8 @@ export const postUserFollowAPI: Handler = async (event: any, context: Context, c
  */
  export const deleteUserFollowAPI: Handler = async (event: any, context: Context, callback: Callback) => {
     context.callbackWaitsForEmptyEventLoop = false;
-    return await deleteUserFollow(event)
+    const user_id =  verifyAccessToken(event);
+    return user_id ? deleteUserFollow(event, user_id): BrownyMsgResponse(400, 'Invalid Access token Request');
 };
 
 /**
@@ -32,5 +36,5 @@ export const getUserFollowsAPI: Handler = async (event: any, context: Context, c
  */
  export const getUserFollowersAPI: Handler = async (event: any, context: Context, callback: Callback) => {
     context.callbackWaitsForEmptyEventLoop = false;
-    return await getUserFollowers(event)
+    return await getUserFollowers(event);
   };

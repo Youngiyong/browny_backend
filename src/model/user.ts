@@ -74,6 +74,10 @@ export async function loginBrowny(event: any) {
     return response
 }
 
+
+
+
+
 export async function joinMemberShipAfterEmailAuth(payload: any, user_temp: any){
     const connection = new Database();
     await connection.getConnection();
@@ -280,16 +284,13 @@ export async function updateProfile(user_id: string, body: any){
     },
   })
   if(userProfile){
-
-    for (const [key, value] of Object.entries(body)) {
+    for (const [key, value] of Object.entries(JSON.parse(body))) {
       userProfile[key] = value;
     }
     userProfile.updated_at = new Date();
     await userRepo.save(userProfile)
-    const response = {
-      data : userProfile
-    }
-    return response
+
+    return BrownyCreateResponse(200, userProfile)
   } else {
     throw new Error("user is not exist")
   }
@@ -311,10 +312,7 @@ export async function updateProfileThumnail(user_id: string, uploadPath: string|
     userProfile.thumbnail = uploadPath
     userProfile.updated_at = new Date();
     await userRepo.save(userProfile);
-    const response = {
-          data : userProfile
-    }
-    return response
+    return BrownyCreateResponse(200, userProfile)
   } else {
     throw new Error("user is not exist")
   }
