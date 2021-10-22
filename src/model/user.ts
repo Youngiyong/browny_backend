@@ -33,6 +33,33 @@ export async function logoutBrowny() {
   
 }
 
+export async function changePassword(event: any){
+  const connection = new Database();
+  await connection.getConnection();
+  const body = JSON.parse(event.body);
+
+  if(body.password !== body.repeat_password){
+    return BrownyMsgResponse(400, "비밀번호가 같지 않습니다. 다시 확인해주세요.")
+  }
+
+  const userRepo = await getRepository(User)
+  const user = await userRepo.findOne({
+    where: {
+      email: body.email,
+    },
+  });
+
+  if(!user){
+    return BrownyMsgResponse(404, "존재하지 않는 사용자입니다.")
+  }
+
+  user.password = hashPassword(body.password)
+  user.updated_at = new Date();
+  await userRepo.save(user)
+
+  return BrownyMsgResponse(200, "Success")
+}
+
 export async function loginBrowny(event: any) {
   const connection = new Database();
   await connection.getConnection();

@@ -10,7 +10,7 @@ import { createUserFollow, deleteUserFollow, getUserFollows, getUserFollowers } 
 export const postUserFollowAPI: Handler = async (event: any, context: Context, callback: Callback) => {
   context.callbackWaitsForEmptyEventLoop = false;
   const user_id =  verifyAccessToken(event);
-  return user_id ? createUserFollow(event, user_id): BrownyMsgResponse(400, 'Invalid Access token Request');
+  return user_id ? await createUserFollow(event, user_id): BrownyMsgResponse(400, 'Invalid Access token Request');
 };
 
 /**
@@ -19,7 +19,7 @@ export const postUserFollowAPI: Handler = async (event: any, context: Context, c
  export const deleteUserFollowAPI: Handler = async (event: any, context: Context, callback: Callback) => {
     context.callbackWaitsForEmptyEventLoop = false;
     const user_id =  verifyAccessToken(event);
-    return user_id ? deleteUserFollow(event, user_id): BrownyMsgResponse(400, 'Invalid Access token Request');
+    return user_id ? await deleteUserFollow(event, user_id): BrownyMsgResponse(400, 'Invalid Access token Request');
 };
 
 /**

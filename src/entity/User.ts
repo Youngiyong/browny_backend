@@ -48,7 +48,7 @@ export default class User {
   @OneToOne(type => UserProfile, profile => profile.user)
   profile!: UserProfile;
 
-  @OneToMany(type => UserFollow, follow => follow.user)
+  @OneToOne(type => UserFollow, follow => follow.user)
   follow!: UserFollow;
 
   async generateUserToken() {

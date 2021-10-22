@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk';
 import sanitize from 'sanitize-html';
-import { SendEmailRequest, SendEmailResponse } from 'aws-sdk/clients/ses';
+import { SendEmailRequest } from 'aws-sdk/clients/ses';
 
 const ses = new AWS.SES({ region: 'ap-northeast-2' });
 
@@ -34,37 +34,37 @@ export const createAuthEmail = (registered: boolean, code: string) => {
   };
 };
 
-export const sendMail = ({ to, subject, body, from }: EmailParams): Promise<SendEmailResponse> => {
-  return new Promise((resolve, reject) => {
-    const params: SendEmailRequest = {
-      Destination: {
-        ToAddresses: typeof to === 'string' ? [to] : to
-      },
-      Message: {
-        Body: {
-          Html: {
-            Charset: 'UTF-8',
-            Data: body
-          },
-          Text: {
-            Charset: 'UTF-8',
-            Data: sanitize(body, { allowedTags: [] })
-          }
-        },
-        Subject: {
+export const sendMail  =  async ({ to, subject, body, from }: EmailParams) => {
+  const params: SendEmailRequest = {
+    Destination: {
+      ToAddresses: typeof to === 'string' ? [to] : to
+    },
+    Message: {
+      Body: {
+        Html: {
           Charset: 'UTF-8',
-          Data: subject
+          Data: body
+        },
+        Text: {
+          Charset: 'UTF-8',
+          Data: sanitize(body, { allowedTags: [] })
         }
       },
-      Source: from
-    };
-    ses.sendEmail(params, (err, data) => {
-      if (err) {
-        reject(err);
+      Subject: {
+        Charset: 'UTF-8',
+        Data: subject
       }
-      resolve(data);
-    });
-  });
-};
+    },
+    Source: from
+  };
+  
+  return await ses.sendEmail(params).promise()
+        .then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+  })
 
-export default sendMail;
+}
+
+// export default sendMail;

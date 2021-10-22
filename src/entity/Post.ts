@@ -33,11 +33,11 @@ export default class Post extends BaseEntity {
   @Column({ length: 255, nullable: true, type: 'varchar' })
   thumbnail!: string | null;
 
-  @Column()
-  is_markdown!: boolean;
-
-  @Column()
-  is_temp!: boolean;
+  // @Column()
+  // is_markdown!: boolean;
+  //
+  // @Column()
+  // is_temp!: boolean;
 
   @ManyToOne((type) => User, { cascade: true, eager: true })
   @JoinColumn({ name: 'fk_user_id' })

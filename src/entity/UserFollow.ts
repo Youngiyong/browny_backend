@@ -21,14 +21,16 @@ import {
   
     @Column('uuid')
     fk_user_id!: string;
-  
+
     @Column('uuid')
     fk_follow_user_id!: string;
 
+    @OneToOne(type => User)
     @JoinColumn({ name: 'fk_user_id' })
-    user!: User;
+    follower_user!: User;
 
-    @JoinColumn({ name: 'fk_user_id' })
+    @OneToOne(type => User)
+    @JoinColumn({ name: 'fk_follow_user_id' })
     follow_user!: User;
   }
   

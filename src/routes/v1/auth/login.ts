@@ -1,6 +1,6 @@
 import { Context, Callback, Handler } from 'aws-lambda';
-import { emailCodeAuth, updateEmailCode, createEmailCode } from '../../../model/email';
-import { joinMemberShipBeforeEmailAuth, loginBrowny, logoutBrowny } from '../../../model/user'
+import { emailCodeAuth, updateEmailCode, createEmailCode, changePasswordCreateEmailCode } from '../../../model/email';
+import { joinMemberShipBeforeEmailAuth, loginBrowny, logoutBrowny, changePassword } from '../../../model/user'
 
 
 /**
@@ -28,11 +28,19 @@ export const updateSendEmailAuth: Handler = async (event: any, context: Context,
 }
 
 /**
- *  비밀번호 변경시 이메일 인증
+ *  이메일 인증 후 비밀번호 변경 
  */
 export const changePasswdByEmail: Handler = async (event: any, context: Context, callback: Callback) => {
     context.callbackWaitsForEmptyEventLoop = false;
-    return await createEmailCode(event.body)
+    return await changePassword(event)
+};
+
+/**
+ *  비밀번호 변경 이메일 인증 코드 발송
+ */
+ export const changePasswordSendEmail: Handler = async (event: any, context: Context, callback: Callback) => {
+    context.callbackWaitsForEmptyEventLoop = false;
+    return await changePasswordCreateEmailCode(event)
 };
 
 

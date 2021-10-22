@@ -5,7 +5,7 @@ const HASH_KEY  = process.env.HASH_KEY;
 
 
 export function randomEmailCode(){
-    return randomBytes(6).toString('hex');
+    return randomBytes(3).toString('hex');
 }
 
 export function hashPassword(password: string) {

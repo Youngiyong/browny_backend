@@ -96,13 +96,13 @@ export async function getUserFollowers(event: any){
         })
         if(!user) return BrownyMsgResponse(400, "존재하지 않는 사용자입니다.")         
 
-        const userFollowRepo = getRepository(UserFollow)
-        const userFollow = await userFollowRepo.find({
-            where: {
-                fk_follow_user_id: payload.user_id
-            }
-        })
-        console.log(userFollow)
+        const userFollow = await getRepository(UserFollow)
+                          .createQueryBuilder("user_follow")
+                          .innerJoinAndSelect('user_follow.follow_user','user')
+                          .innerJoinAndSelect('user.profile', 'profile')
+                          .where('user_follow.fk_follow_user_id = :fk_user_id', { fk_user_id: payload.user_id} )
+                          .getMany();
+
         return BrownyCreateResponse(200, userFollow)
 
     } catch(e){
@@ -124,17 +124,14 @@ export async function getUserFollows(event: any){
             }
         })
         if(!user) return BrownyMsgResponse(400, "존재하지 않는 사용자입니다.")         
-        console.log(user)
-        // const userFollow = getRepository(UserFollow).createQueryBuilder("user_follow")
-        // .innerJoinAndSelect('user.follow', 'follow')
-        // .where('user_follow.fk_user_id = :fk_user_id', { fk_user_id: payload.user_id} )
-        // .getOne();
-        const userFollowRepo = await getRepository(UserFollow)
-        const userFollow = await userFollowRepo.find({
-            where: {
-                fk_user_id: payload.user_id
-            }
-        })
+
+        const userFollow = await getRepository(UserFollow)
+                          .createQueryBuilder("user_follow")
+                          .innerJoinAndSelect('user_follow.follower_user','user')
+                          .innerJoinAndSelect('user.profile', 'profile')
+                          .where('user_follow.fk_user_id = :fk_user_id', { fk_user_id: payload.user_id} )
+                          .getMany();
+
         console.log(userFollow)
         return BrownyCreateResponse(200, userFollow)
 
