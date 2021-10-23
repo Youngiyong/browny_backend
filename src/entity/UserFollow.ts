@@ -12,6 +12,7 @@ import {
     synchronize: false
   })
   export default class UserFollow {
+    
     @PrimaryGeneratedColumn('uuid')
     id!: string;
   
@@ -19,10 +20,11 @@ import {
     @CreateDateColumn()
     created_at!: Date;
   
-    @Column('uuid')
+    @Column({select: false, type: 'uuid' })
     fk_user_id!: string;
 
-    @Column('uuid')
+
+    @Column({select: false,  type: 'uuid' })
     fk_follow_user_id!: string;
 
     @OneToOne(type => User)

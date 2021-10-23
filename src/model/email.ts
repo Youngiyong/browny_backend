@@ -33,12 +33,10 @@ export const emailCodeAuth =  async (event: any) => {
     if(!user_temp) return BrownyMsgResponse(400, "이메일 인증 요청을 다시 진행해주세요.")
 
     //사용자가 입력한 인증코드와 저장된 인증코드가 같은지 확인한다.
-    if(payload.code===user_temp.code && payload.is_type==="false"){
-        console.log("hi")
+    if(payload.code===user_temp.code && payload.is_type===false){
         return await joinMemberShipAfterEmailAuth(payload, user_temp)
-    } else if(payload.code===user_temp.code && payload.is_type==="true"){
-        console.log("hi22")
-        return BrownyMsgResponse(200, "Success Change Password Emai Auth")
+    } else if(payload.code===user_temp.code && payload.is_type===true){
+        return BrownyMsgResponse(200, "OK")
     }
     else return BrownyCreateResponse(400, "이메일 인증코드가 일치하지 않습니다.")
 
@@ -90,7 +88,7 @@ export const changePasswordCreateEmailCode = async (event: any) => {
         console.error(e)
     });
 
-    return BrownyMsgResponse(200, "Success")
+    return BrownyMsgResponse(200, "OK")
 }
 
 export const createEmailCode  =  async (payload: {}) => {
@@ -127,7 +125,7 @@ export const createEmailCode  =  async (payload: {}) => {
         console.error(e)
     });
 
-    return BrownyMsgResponse(200, "Success")
+    return BrownyMsgResponse(200, "OK")
 
 }
 
@@ -206,7 +204,7 @@ export const updateEmailCode  =  async (event: any) => {
         console.error("email is not exist", err)
     });
    
-    return BrownyMsgResponse(200, "Success Send email")
+    return BrownyMsgResponse(200, "OK")
 
 }
 

@@ -30,7 +30,7 @@ export const verifyRefreshToken = (token: string) => {
 export const generateAccessToken = (id: string) => {
   return jwt.sign({ id }, process.env.JWT_SECRET_KEY as string, {
     subject: 'access_token',
-    expiresIn: '60m',
+    expiresIn: '180m',
   });
 };
 

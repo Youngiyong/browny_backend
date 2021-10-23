@@ -57,7 +57,7 @@ export async function changePassword(event: any){
   user.updated_at = new Date();
   await userRepo.save(user)
 
-  return BrownyMsgResponse(200, "Success")
+  return BrownyMsgResponse(200, "OK")
 }
 
 export async function loginBrowny(event: any) {
@@ -135,7 +135,7 @@ export async function joinMemberShipAfterEmailAuth(payload: any, user_temp: any)
       userprofile.fk_user_id = user.id
       await userProfileRepo.save(userprofile)
 
-      return BrownyCreateResponse(200, "회원가입 성공")
+      return BrownyCreateResponse(200, "OK")
 
   } catch (e) {
     throw new Error("Invalid Request Error:"+ e)

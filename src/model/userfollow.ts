@@ -38,7 +38,7 @@ export async function createUserFollow(event: any, user_id: string){
         follow.fk_follow_user_id = payload.follow_user_id
 
         await userFollowRepo.save(follow)
-        return BrownyMsgResponse(200, "Success Follow User")
+        return BrownyMsgResponse(200, "OK")
     } catch(e){
         console.error(e)
         throw new Error("Internal Server Error")
@@ -49,8 +49,9 @@ export async function deleteUserFollow(event: any, user_id: string){
     const connection = new Database();
     await connection.getConnection();
 
-    const payload = event.pathParameters
+    const follow_user_id = event.pathParameters
     console.log(event)
+    console.log("user_follow_id", follow_user_id)
     try {
         const userRepo = getRepository(User)
         const user = await userRepo.findOne({
@@ -63,14 +64,14 @@ export async function deleteUserFollow(event: any, user_id: string){
         const userFollowRepo = getRepository(UserFollow)
         const userFollow = await userFollowRepo.findOne({
             where: {
-                id: payload.user_id,
-                fk_follow_user_id: user_id
+                fk_follow_user_id:follow_user_id.user_id,
+                fk_user_id: user_id,
             }
         })
         console.log(userFollow)
         if(userFollow) {
             userFollowRepo.remove(userFollow)
-            return BrownyMsgResponse(200, "Delete Success")
+            return BrownyMsgResponse(200, "OK")
         }
         else {
             return BrownyMsgResponse(400, "팔로우한 사용자가 존재하지 않습니다.")
@@ -98,7 +99,7 @@ export async function getUserFollowers(event: any){
 
         const userFollow = await getRepository(UserFollow)
                           .createQueryBuilder("user_follow")
-                          .innerJoinAndSelect('user_follow.follow_user','user')
+                          .innerJoinAndSelect('user_follow.follower_user','user')
                           .innerJoinAndSelect('user.profile', 'profile')
                           .where('user_follow.fk_follow_user_id = :fk_user_id', { fk_user_id: payload.user_id} )
                           .getMany();
@@ -127,12 +128,12 @@ export async function getUserFollows(event: any){
 
         const userFollow = await getRepository(UserFollow)
                           .createQueryBuilder("user_follow")
-                          .innerJoinAndSelect('user_follow.follower_user','user')
+                          .innerJoinAndSelect('user_follow.follow_user','user')
                           .innerJoinAndSelect('user.profile', 'profile')
                           .where('user_follow.fk_user_id = :fk_user_id', { fk_user_id: payload.user_id} )
                           .getMany();
 
-        console.log(userFollow)
+        console.log("??",userFollow)
         return BrownyCreateResponse(200, userFollow)
 
     } catch(e){
