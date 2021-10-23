@@ -17,29 +17,24 @@
 
 - yarn install
 
-
 ### Development
 #### deployment
 - development : yarn deploy && npx sls deploy --stage dev
 - production : yarn deploy:prod && npx sls deploy --stage prod
 
+### Doc/Swagger
+![swaggerhub](swaggerhub.png)
+- https://app.swaggerhub.com 
+- ID/PW Notion check
 
 ### Test Local
 #### sls offline
-- npx sls package
-- sls offline
+- yarn offline
 - postman + insomnia + api tool test
 ![offline](offline.png)
-
+![postman](postman.png)
 #### invoke local
 - sls invoke local -f {serverless.yml function name} -p payload/{payload file}
 - sls invoke local -f getuser -p payload/find.json
 - sls invoke local -f createuser -p payload/create.json
 - ...etc
-
-## Reference
-```
-https://www.serverless.com/framework/docs
-https://www.npmjs.com/package/serverless-typeorm
-https://github.com/velopert/velog-server
-```
