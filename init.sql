@@ -60,39 +60,6 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 
 --
--- Name: auth_tokens; Type: TABLE; Schema: public; Owner: browny
---
-
-CREATE TABLE public.auth_tokens (
-    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    fk_user_id uuid NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL,
-    disabled boolean DEFAULT false NOT NULL
-);
-
-
-ALTER TABLE public.auth_tokens OWNER TO browny;
-
-
---
--- Name: auth_email; Type: TABLE; Schema: public; Owner: browny
---
-
-CREATE TABLE public.auth_email (
-    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
-    code character varying(255),
-    email character varying(255),
-    is_success boolean DEFAULT false,
-    created_at timestamp with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp with time zone DEFAULT now() NOT NULL
-);
-
-
-ALTER TABLE public.auth_email OWNER TO browny;
-
-
---
 -- Name: users; Type: TABLE; Schema: public; Owner: browny
 --
 
@@ -100,6 +67,7 @@ CREATE TABLE public.users (
     id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     username character varying(255),
     email character varying(255),
+    password character varying(255),
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
     is_certified boolean DEFAULT false
@@ -107,7 +75,6 @@ CREATE TABLE public.users (
 
 
 ALTER TABLE public.users OWNER TO browny;
-
 
 
 -- Name: social_accounts; Type: TABLE; Schema: public; Owner: browny
@@ -145,7 +112,6 @@ CREATE TABLE public.user_profiles (
 
 ALTER TABLE public.user_profiles OWNER TO browny;
 
-
 --
 -- Name: user_follows; Type: TABLE; Schema: public; Owner: browny
 --
@@ -155,40 +121,110 @@ CREATE TABLE public.user_follows (
     fk_user_id uuid NOT NULL,
     fk_follow_user_id uuid NOT NULL,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
-
 
 ALTER TABLE public.user_follows OWNER TO browny;
 
 
+--
+-- Name: tags; Type: TABLE; Schema: public; Owner: browny
+--
+
+CREATE TABLE public.tags (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    description character varying(255),
+    thumbnail character varying(255),
+    created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+ALTER TABLE public.tags OWNER TO browny;
 
 
 --
--- Name: auth_email auth_email_code_key; Type: CONSTRAINT; Schema: public; Owner: browny
+-- Name: qna_tags; Type: TABLE; Schema: public; Owner: browny
 --
 
-ALTER TABLE ONLY public.auth_email
-    ADD CONSTRAINT auth_email_code_key UNIQUE (code);
+CREATE TABLE public.qna_tags (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    fk_qna_id uuid NOT NULL,
+    fk_tag_id uuid NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+ALTER TABLE public.qna_tags OWNER TO browny;
+
+--
+-- Name: qnas; Type: TABLE; Schema: public; Owner: browny
+--
+
+CREATE TABLE public.qnas (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    title character varying(255),
+    text text,
+    fk_user_id uuid NOT NULL,
+    is_private boolean DEFAULT false NOT NULL,
+    is_markdown boolean default false NOT NULL,
+    is_temp boolean default false NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    deleted_at timestamp DEFAULT NULL
+);
+
+ALTER TABLE public.qnas OWNER TO browny;
 
 
 --
--- Name: auth_email auth_email_pkey; Type: CONSTRAINT; Schema: public; Owner: browny
+-- Name: qna_comments; Type: TABLE; Schema: public; Owner: browny
 --
 
-ALTER TABLE ONLY public.auth_email
-    ADD CONSTRAINT auth_email_pkey PRIMARY KEY (id);
+CREATE TABLE public.qna_comments (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    fk_qna_id uuid NOT NULL,
+    fk_user_id uuid NOT NULL,
+    text text,
+    likes integer DEFAULT 0,
+    is_private boolean DEFAULT false NOT NULL,
+    is_reply boolean DEFAULT false,
+    reply_to uuid,
+    level integer DEFAULT 0,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    deleted_at timestamp DEFAULT NULL
+);
+
+ALTER TABLE public.qnas OWNER TO browny;
 
 
 
 --
--- Name: auth_tokens PK_41e9ddfbb32da18c4e85e45c2fd; Type: CONSTRAINT; Schema: public; Owner: browny
+-- Name: qna_aggregations; Type: TABLE; Schema: public; Owner: browny
 --
 
-ALTER TABLE ONLY public.auth_tokens
-    ADD CONSTRAINT "PK_41e9ddfbb32da18c4e85e45c2fd" PRIMARY KEY (id);
+CREATE TABLE public.qna_aggregations (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    fk_qna_id uuid NOT NULL,
+    likes integer DEFAULT 0,
+    views integer DEFAULT 0,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+ALTER TABLE public.qna_aggregations OWNER TO browny;
 
 
+--
+-- Name: qna_likes; Type: TABLE; Schema: public; Owner: browny
+--
+
+CREATE TABLE public.qna_likes (
+    id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    fk_qna_id uuid NOT NULL,
+    fk_user_id uuid NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
+ALTER TABLE public.qna_likes OWNER TO browny;
 
 --
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: browny
@@ -196,7 +232,6 @@ ALTER TABLE ONLY public.auth_tokens
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
-
 
 
 --
@@ -223,3 +258,53 @@ ALTER TABLE ONLY public.user_profiles
 ALTER TABLE ONLY public.user_follows
     ADD CONSTRAINT user_follows_pkey PRIMARY KEY (id);
 
+
+
+
+--
+-- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: browny
+--
+
+ALTER TABLE ONLY public.tags
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: qna_tags qna_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: browny
+--
+
+ALTER TABLE ONLY public.qna_tags
+    ADD CONSTRAINT qna_tags_pkey PRIMARY KEY (id);
+
+
+
+--
+-- Name: qnas qnas_pkey; Type: CONSTRAINT; Schema: public; Owner: browny
+--
+
+ALTER TABLE ONLY public.qnas
+    ADD CONSTRAINT qnas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: qna_comments qna_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: browny
+--
+
+ALTER TABLE ONLY public.qna_comments
+    ADD CONSTRAINT qna_comments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: qna_aggregations qna_aggregations_pkey; Type: CONSTRAINT; Schema: public; Owner: browny
+--
+
+ALTER TABLE ONLY public.qna_aggregations
+    ADD CONSTRAINT qna_aggregations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: qna_likes qna_likes_pkey; Type: CONSTRAINT; Schema: public; Owner: browny
+--
+
+ALTER TABLE ONLY public.qna_likes
+    ADD CONSTRAINT qna_likes_pkey PRIMARY KEY (id);
