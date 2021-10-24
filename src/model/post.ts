@@ -1,7 +1,7 @@
 import Database, { connectDatabase } from '../database';
 import { getRepository } from 'typeorm';
 import Post from '../entity/Post';
-import { BrownyCreateResponse, BrownyMsgResponse } from '../lib/response';
+import { DeplResponse, DeplMsgResponse } from '../lib/response';
 
 export const writePost = async (event: any) => {
   await connectDatabase();
@@ -35,9 +35,9 @@ export const getPosts = async (event: any) => {
     });
     console.log(posts);
 
-    if (!posts) return BrownyMsgResponse(400, '포스트가 없습니다.');
+    if (!posts) return DeplMsgResponse(400, '포스트가 없습니다.');
 
-    return BrownyCreateResponse(200, posts);
+    return DeplResponse(200, posts);
   } catch (e) {
     console.error(e);
   }

@@ -844,6 +844,194 @@ functions:
                 statusCode: "500"
                 responseModels:
                   "application/json": "500"
+  
+  putTagHandler:
+    handler: src/routes/v1/tags/handler.putTagHandler
+    events:
+      - http:
+          method: put
+          path: v1/tags/{id}
+          authorizer: auth
+          cors:
+            origin: "*"
+            headers: "*"
+          private: false
+          documentation:
+            summary: "tag 수정 API"
+            description: "tag 수정"
+            tags:
+              - "tags"
+            requestBody:
+              description: "tag body"
+            requestModels:
+              "application/json": "requestTag"
+            requestHeaders:
+              -
+                name: "Authorization"
+                description: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjYjNjN2M1LTRkNWQtNDI2Ni1iZWY0LTc3NmZmZjZjMjdmYiIsImlhdCI6MTYzNDk3Nzc2NywiZXhwIjoxNjM0OTgxMzY3LCJzdWIiOiJhY2Nlc3NfdG9rZW4ifQ.66CFWs6kVr9fjeGCe0g5EmkwXDmWd8kAPPSVVNnbRw0"
+            methodResponses:
+              -
+                statusCode: "200"
+                responseModels:
+                  "application/json": "200"
+              -
+                statusCode: "401"
+                responseModels:
+                  "application/json": "401"
+              -
+                statusCode: "404"
+                responseModels:
+                  "application/json": "404"
+              -
+                statusCode: "500"
+                responseModels:
+                  "application/json": "500" 
+  deleteTagHandler:
+    handler: src/routes/v1/tags/handler.deleteTagHandler
+    events:
+      - http:
+          method: delete
+          path: v1/tags/{id}
+          authorizer: auth
+          cors:
+            origin: "*"
+            headers: "*"
+          private: false
+          documentation:
+            summary: "tag 삭제 API"
+            description: "tag 삭제"
+            tags:
+              - "tags"
+            requestHeaders:
+              -
+                name: "Authorization"
+                description: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjYjNjN2M1LTRkNWQtNDI2Ni1iZWY0LTc3NmZmZjZjMjdmYiIsImlhdCI6MTYzNDk3Nzc2NywiZXhwIjoxNjM0OTgxMzY3LCJzdWIiOiJhY2Nlc3NfdG9rZW4ifQ.66CFWs6kVr9fjeGCe0g5EmkwXDmWd8kAPPSVVNnbRw0"
+            methodResponses:
+              -
+                statusCode: "200"
+                responseModels:
+                  "application/json": "200"
+              -
+                statusCode: "401"
+                responseModels:
+                  "application/json": "401"
+              -
+                statusCode: "404"
+                responseModels:
+                  "application/json": "404"
+              -
+                statusCode: "500"
+                responseModels:
+                  "application/json": "500" 
+  postTagHandler:
+    handler: src/routes/v1/tags/handler.postTagHandler
+    events:
+      - http:
+          method: post
+          path: v1/tags
+          authorizer: auth
+          cors:
+            origin: "*"
+            headers: "*"
+          private: false
+          
+          documentation:
+            summary: "tag 등록 API"
+            description: "tag 등록"
+            tags:
+              - "tags"
+            requestBody:
+              description: "tag body"
+            requestModels:
+              "application/json": "requestTag"
+            requestHeaders:
+              -
+                name: "Authorization"
+                description: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFjYjNjN2M1LTRkNWQtNDI2Ni1iZWY0LTc3NmZmZjZjMjdmYiIsImlhdCI6MTYzNDk3Nzc2NywiZXhwIjoxNjM0OTgxMzY3LCJzdWIiOiJhY2Nlc3NfdG9rZW4ifQ.66CFWs6kVr9fjeGCe0g5EmkwXDmWd8kAPPSVVNnbRw0"
+            methodResponses:
+              -
+                statusCode: "200"
+                responseModels:
+                  "application/json": "200"
+              -
+                statusCode: "401"
+                responseModels:
+                  "application/json": "401"
+              -
+                statusCode: "404"
+                responseModels:
+                  "application/json": "404"
+              -
+                statusCode: "500"
+                responseModels:
+                  "application/json": "500"    
+  getTagsHandler:
+    handler: src/routes/v1/tags/handler.getTagsHandler
+    events:
+      - http:
+          method: get
+          path: v1/tags
+          authorizer: auth
+          cors:
+            origin: "*"
+            headers: "*"
+          private: false
+          
+          documentation:
+            summary: "tag 전체 조회 API"
+            description: "tag 조회"
+            tags:
+              - "tags"
+            methodResponses:
+              -
+                statusCode: "200"
+                responseModels:
+                  "application/json": "responseTags"
+              -
+                statusCode: "401"
+                responseModels:
+                  "application/json": "401"
+              -
+                statusCode: "404"
+                responseModels:
+                  "application/json": "404"
+              -
+                statusCode: "500"
+                responseModels:
+                  "application/json": "500"    
+  getTagHandler:
+    handler: src/routes/v1/tags/handler.getTagHandler
+    events:
+      - http:
+          method: get
+          path: v1/tags/{name}
+          cors:
+            origin: "*"
+            headers: "*"
+          private: false
+          
+          documentation:
+            summary: "tag 조회 API"
+            description: "tag 조회"
+            tags:
+              - "tags"
+            methodResponses:
+              -
+                statusCode: "200"
+                responseModels:
+                  "application/json": "responseTag"
+              -
+                statusCode: "401"
+                responseModels:
+                  "application/json": "401"
+              -
+                statusCode: "404"
+                responseModels:
+                  "application/json": "404"
+              -
+                statusCode: "500"
+                responseModels:
+                  "application/json": "500"   
   writePost:
     handler: src/routes/v1/posts/handler.writePostAPI
     events:

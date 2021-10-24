@@ -1,5 +1,5 @@
 import { Context, Callback, Handler } from 'aws-lambda';
-import { BrownyMsgResponse } from '../../../lib/response';
+import { DeplMsgResponse } from '../../../lib/response';
 import { verifyAccessToken } from '../../../lib/token';
 import { updateProfileThumnail, updateProfile } from '../../../model/user';
 
@@ -10,7 +10,7 @@ export const deleteProfileImage: Handler = async (event: any, context: Context, 
   context.callbackWaitsForEmptyEventLoop = false;
   const uploadPath = null;
   const user_id = verifyAccessToken(event);
-  return user_id ? await updateProfileThumnail(user_id, uploadPath) : BrownyMsgResponse(400, 'Invalid Access token Request');
+  return user_id ? await updateProfileThumnail(user_id, uploadPath) : DeplMsgResponse(400, 'Invalid Access token Request');
 };
 
 
@@ -21,6 +21,6 @@ export const putProfile: Handler = async (event: any, context: Context, callback
   context.callbackWaitsForEmptyEventLoop = false;
   const body = event.body
   const user_id = verifyAccessToken(event);
-  return user_id ? await updateProfile(user_id, body) : BrownyMsgResponse(400, 'Invalid Access token Request');
+  return user_id ? await updateProfile(user_id, body) : DeplMsgResponse(400, 'Invalid Access token Request');
 };
 

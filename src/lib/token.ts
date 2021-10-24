@@ -1,5 +1,5 @@
 import * as jwt from 'jsonwebtoken';
-import { BrownyMsgResponse } from './response';
+import { DeplMsgResponse } from './response';
 
 export function setTokenCookie(
     tokens: { accessToken: string; refreshToken: string }

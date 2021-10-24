@@ -7,7 +7,7 @@ import UserProfile from '../entity/UserProfile';
 import SocialAccount from '../entity/SocialAccount';
 import { generateAccessToken, setTokenCookie } from '../lib/token';
 import { APIGatewayProxyResponse } from "../model/type"
-import {  BrownyCreateResponse, BrownyMsgResponse } from "../lib/response" 
+import {  DeplResponse, DeplMsgResponse } from "../lib/response" 
 import {  decryptPassword, hashPassword } from '../lib/hash';
 import { createEmailCode, findCodeByEmail } from './email';
 
@@ -39,7 +39,7 @@ export async function changePassword(event: any){
   const body = JSON.parse(event.body);
 
   if(body.password !== body.repeat_password){
-    return BrownyMsgResponse(400, "비밀번호가 같지 않습니다. 다시 확인해주세요.")
+    return DeplMsgResponse(400, "비밀번호가 같지 않습니다. 다시 확인해주세요.")
   }
 
   const userRepo = await getRepository(User)
@@ -50,14 +50,14 @@ export async function changePassword(event: any){
   });
 
   if(!user){
-    return BrownyMsgResponse(404, "존재하지 않는 사용자입니다.")
+    return DeplMsgResponse(404, "존재하지 않는 사용자입니다.")
   }
 
   user.password = hashPassword(body.password)
   user.updated_at = new Date();
   await userRepo.save(user)
 
-  return BrownyMsgResponse(200, "OK")
+  return DeplMsgResponse(200, "OK")
 }
 
 export async function loginBrowny(event: any) {
@@ -72,7 +72,7 @@ export async function loginBrowny(event: any) {
               .getOne();
               
   const decryptPasswd = decryptPassword(user.password, body.password)
-  if(!decryptPasswd) return BrownyMsgResponse(400, "비밀번호가 일치하지 않습니다.")
+  if(!decryptPasswd) return DeplMsgResponse(400, "비밀번호가 일치하지 않습니다.")
   console.log(user)
   const tokens = await user.generateUserToken();
   const cookies = setTokenCookie(tokens)
@@ -119,7 +119,7 @@ export async function joinMemberShipAfterEmailAuth(payload: any, user_temp: any)
                     .getOne();
 
     if(is_user){
-        return BrownyMsgResponse(400, "이미 존재하는 사용자라 회원가입 진행이 불가합니다.")
+        return DeplMsgResponse(400, "이미 존재하는 사용자라 회원가입 진행이 불가합니다.")
     }
     
       const user = new User();
@@ -135,7 +135,7 @@ export async function joinMemberShipAfterEmailAuth(payload: any, user_temp: any)
       userprofile.fk_user_id = user.id
       await userProfileRepo.save(userprofile)
 
-      return BrownyCreateResponse(200, "OK")
+      return DeplResponse(200, "OK")
 
   } catch (e) {
     throw new Error("Invalid Request Error:"+ e)
@@ -149,7 +149,7 @@ export async function joinMemberShipBeforeEmailAuth(event: any) {
   const body = JSON.parse(event.body)
   
   if(body.password !== body.repeat_password){
-    return BrownyMsgResponse(400, "비밀번호가 같지 않습니다. 다시 확인해주세요.")
+    return DeplMsgResponse(400, "비밀번호가 같지 않습니다. 다시 확인해주세요.")
   }
 
   const user = await userRepo.findOne({
@@ -159,7 +159,7 @@ export async function joinMemberShipBeforeEmailAuth(event: any) {
   });
   
   if(user){
-    return BrownyMsgResponse(400, "이메일이 이미 존재합니다. 비밀번호 찾기로 확인해보세요!")
+    return DeplMsgResponse(400, "이메일이 이미 존재합니다. 비밀번호 찾기로 확인해보세요!")
   }
 
   return await createEmailCode(body)
@@ -317,7 +317,7 @@ export async function updateProfile(user_id: string, body: any){
     userProfile.updated_at = new Date();
     await userRepo.save(userProfile)
 
-    return BrownyCreateResponse(200, userProfile)
+    return DeplResponse(200, userProfile)
   } else {
     throw new Error("user is not exist")
   }
@@ -339,7 +339,7 @@ export async function updateProfileThumnail(user_id: string, uploadPath: string|
     userProfile.thumbnail = uploadPath
     userProfile.updated_at = new Date();
     await userRepo.save(userProfile);
-    return BrownyCreateResponse(200, userProfile)
+    return DeplResponse(200, userProfile)
   } else {
     throw new Error("user is not exist")
   }

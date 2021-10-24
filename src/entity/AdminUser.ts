@@ -6,17 +6,19 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
 } from 'typeorm';
+import User from './User';
 
-@Entity('tags', {
-  synchronize: false,
+/** Created with TypeORM **/
+@Entity('admin_users', {
+  synchronize: true
 })
-export default class Tag {
+export default class AdminUser {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Index()
-  @Column({ length: 255 })
-  name!: string;
+  @Column('uuid')
+  fk_user_id!: string;
 
   @Column('timestampz')
   @CreateDateColumn()
@@ -25,11 +27,5 @@ export default class Tag {
   @Column('timestamptz')
   @UpdateDateColumn()
   updated_at!: Date;
-
-  @Column({ length: 255, nullable: true, type: 'varchar' })
-  description!: string | null;
-
-  @Column({ length: 255, nullable: true, type: 'varchar' })
-  thumbnail!: string | null;
 
 }

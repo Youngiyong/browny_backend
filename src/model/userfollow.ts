@@ -2,7 +2,7 @@ import { getConnection, getRepository } from 'typeorm';
 import Database from '../database';
 import User from '../entity/User'
 import UserFollow from '../entity/UserFollow';
-import { BrownyCreateResponse, BrownyMsgResponse } from '../lib/response';
+import { DeplResponse, DeplMsgResponse } from '../lib/response';
 
 export async function createUserFollow(event: any, user_id: string){
     const connection = new Database();
@@ -20,7 +20,7 @@ export async function createUserFollow(event: any, user_id: string){
         console.log(user)
     
         if(!user) {
-            return BrownyMsgResponse(400, "존재하지 않는 사용자입니다.")         
+            return DeplMsgResponse(400, "존재하지 않는 사용자입니다.")         
         }
 
         const userFollowRepo = getRepository(UserFollow)
@@ -31,14 +31,14 @@ export async function createUserFollow(event: any, user_id: string){
             }
         })
         console.log(userFollow)
-        if(userFollow) return BrownyMsgResponse(400, "이미 팔로우한 사용자입니다.")
+        if(userFollow) return DeplMsgResponse(400, "이미 팔로우한 사용자입니다.")
 
         const follow = new UserFollow()
         follow.fk_user_id = user_id
         follow.fk_follow_user_id = payload.follow_user_id
 
         await userFollowRepo.save(follow)
-        return BrownyMsgResponse(200, "OK")
+        return DeplMsgResponse(200, "OK")
     } catch(e){
         console.error(e)
         throw new Error("Internal Server Error")
@@ -59,7 +59,7 @@ export async function deleteUserFollow(event: any, user_id: string){
                 id: user_id
             }
         })
-        if(!user) return BrownyMsgResponse(400, "존재하지 않는 사용자입니다.")         
+        if(!user) return DeplMsgResponse(400, "존재하지 않는 사용자입니다.")         
 
         const userFollowRepo = getRepository(UserFollow)
         const userFollow = await userFollowRepo.findOne({
@@ -71,10 +71,10 @@ export async function deleteUserFollow(event: any, user_id: string){
         console.log(userFollow)
         if(userFollow) {
             userFollowRepo.remove(userFollow)
-            return BrownyMsgResponse(200, "OK")
+            return DeplMsgResponse(200, "OK")
         }
         else {
-            return BrownyMsgResponse(400, "팔로우한 사용자가 존재하지 않습니다.")
+            return DeplMsgResponse(400, "팔로우한 사용자가 존재하지 않습니다.")
         }
 
     } catch(e){
@@ -95,7 +95,7 @@ export async function getUserFollowers(event: any){
                 id: payload.user_id
             }
         })
-        if(!user) return BrownyMsgResponse(400, "존재하지 않는 사용자입니다.")         
+        if(!user) return DeplMsgResponse(400, "존재하지 않는 사용자입니다.")         
 
         const userFollow = await getRepository(UserFollow)
                           .createQueryBuilder("user_follow")
@@ -104,7 +104,7 @@ export async function getUserFollowers(event: any){
                           .where('user_follow.fk_follow_user_id = :fk_user_id', { fk_user_id: payload.user_id} )
                           .getMany();
 
-        return BrownyCreateResponse(200, userFollow)
+        return DeplResponse(200, userFollow)
 
     } catch(e){
         console.error(e)
@@ -124,7 +124,7 @@ export async function getUserFollows(event: any){
                 id: payload.user_id
             }
         })
-        if(!user) return BrownyMsgResponse(400, "존재하지 않는 사용자입니다.")         
+        if(!user) return DeplMsgResponse(400, "존재하지 않는 사용자입니다.")         
 
         const userFollow = await getRepository(UserFollow)
                           .createQueryBuilder("user_follow")
@@ -134,7 +134,7 @@ export async function getUserFollows(event: any){
                           .getMany();
 
         console.log("??",userFollow)
-        return BrownyCreateResponse(200, userFollow)
+        return DeplResponse(200, userFollow)
 
     } catch(e){
         console.error(e)
