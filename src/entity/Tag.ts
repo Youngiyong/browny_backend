@@ -5,7 +5,10 @@ import {
   Index,
   UpdateDateColumn,
   CreateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
+import QnaTag from './QnaTag';
 
 @Entity('tags', {
   synchronize: false,
@@ -32,4 +35,6 @@ export default class Tag {
   @Column({ length: 255, nullable: true, type: 'varchar' })
   thumbnail!: string | null;
 
+  @OneToOne(type => QnaTag)
+  tag!: QnaTag;
 }

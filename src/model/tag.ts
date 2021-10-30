@@ -23,7 +23,7 @@ export const putTag = async (event: any, user_id: string) => {
         const tagRepo = getRepository(Tag);
         const tag = await tagRepo.findOne({
             where: {
-            id: pathParam.id
+            id: pathParam.tag_id
             },
         })
         if(!tag) return DeplMsgResponse(404, "존재하지 않느 태그입니다.")
@@ -95,7 +95,7 @@ export const deleteTag = async (event: any, user_id: string) => {
         const tagRepo = getRepository(Tag);
         const tag = await tagRepo.findOne({
             where: {
-            id: pathParam.id
+            id: pathParam.tag_id
             },
         })
         console.log(tag);
@@ -130,11 +130,10 @@ export const getTag = async (event: any) => {
       const tagRepo = getRepository(Tag);
       const tag = await tagRepo.findOne({
         where: {
-          name: event.pathParameters.name
+          id: event.pathParameters.tag_id
         },
       })
       console.log(tag);
-  
       if (!tag) return DeplMsgResponse(404, '존재하지 않는 태그입니다.');
   
       return DeplResponse(200, tag);

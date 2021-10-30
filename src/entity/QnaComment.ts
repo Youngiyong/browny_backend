@@ -25,9 +25,6 @@ import Qna from './Qnas';
     @Column('text')
     text!: string;
 
-    @Column()
-    likes!: number;
-
     @Column({ default: false })
     is_private!: boolean;
 

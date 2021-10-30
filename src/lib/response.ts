@@ -2,7 +2,7 @@
 export const DeplMsgResponse = (statusCode: number, msg: string) =>{
     return {
         statusCode: statusCode,
-        body: JSON.stringify({ msg : msg }),
+        body: JSON.stringify({ message : msg }),
     }
 }
 
