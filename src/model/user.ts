@@ -169,6 +169,7 @@ export async function createSocialAccount(params: {
   social_id: number | string;
   provider: SocialProvider;
   name: string;
+  email: string;
 }) {
   const connection = new Database();
   await connection.getConnection();
@@ -176,8 +177,10 @@ export async function createSocialAccount(params: {
   const queryRunner = await getConnection().createQueryRunner();
   await queryRunner.startTransaction();
   try {
+    console.log("params", params)
     const userRepository = getRepository(User);
     const user = new User();
+    user.email = params.email;
     user.username = params.name;
     await userRepository.save(user);
 
@@ -243,6 +246,7 @@ export async function getSocialAccount(params: {
   social_id: number | string;
   provider: SocialProvider;
   name: string;
+  email: string;
 }) {
   const connection = new Database();
   await connection.getConnection();

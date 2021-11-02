@@ -7,7 +7,6 @@ import PostComment from '../entity/PostComment';
 import Tag from '../entity/Tag';
 import { DeplResponse, DeplMsgResponse } from '../lib/response';
 
-
 export const writePostLike = async (event: any, user_id: string) => {
   
   await connectDatabase();
@@ -181,7 +180,7 @@ export const deletePost = async (event: any, user_id: string) => {
       post.updated_at = new Date();
       post.deleted_at = new Date();
 
-      postRepo.save(post)
+      await postRepo.save(post)
 
       return DeplMsgResponse(200, "OK")
   } catch (e) {
@@ -334,21 +333,6 @@ export const getPost = async (event: any) => {
 }
 
 
-export const findAllQna = async (event: any) => {
-  await connectDatabase();
-
-  const qnaRepo = getRepository(Qna)
-  const qna = await qnaRepo.find(
-      { 
-          where: {
-              deleted_at: null
-          },
-         relations: ["aggregations", "comments", "tags", "likes"] });
-
-  if(!qna) return DeplMsgResponse(404, "qna 정보가 없습니다.")
-  return DeplResponse(200, qna)
-}
-
 export const writePostComment = async (event: any, user_id: string) => {
   await connectDatabase();
   
@@ -364,7 +348,7 @@ export const writePostComment = async (event: any, user_id: string) => {
           },
       })
 
-      if(!post) return DeplMsgResponse(404, "존재하지 않거나 삭제된 QNA입니다.")
+      if(!post) return DeplMsgResponse(404, "존재하지 않거나 삭제된 Post입니다.")
 
       const post_comment = new PostComment();
 

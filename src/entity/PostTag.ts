@@ -20,10 +20,10 @@ import Tag from './Tag';
     id!: string;
   
     @Column('uuid')
-    fk_qna_id!: string;
+    fk_post_id!: string;
   
     @Column('uuid')
-    fk_post_id!: string;
+    fk_tag_id!: string;
 
     @Column('timestampz')
     @CreateDateColumn()

@@ -6,11 +6,13 @@ import {
     UpdateDateColumn,
     OneToOne,
     OneToMany,
+    JoinColumn,
   } from 'typeorm';
 import QnaAggregation from './QnaAggregation';
 import QnaComment from './QnaComment';
 import QnaLike from './QnaLike';
 import QnaTag from './QnaTag';
+import User from './User';
   
   @Entity('qnas', {
     synchronize: false,
@@ -22,12 +24,12 @@ import QnaTag from './QnaTag';
   
     @Column({ length: 255 })
     title!: string;
-    
-    @Column('uuid')
-    fk_user_id!: string;
 
     @Column('text')
     text!: string;
+
+    @Column('uuid')
+    fk_user_id!: string;
 
     @Column({ default: false })
     is_private!: boolean;
@@ -48,6 +50,10 @@ import QnaTag from './QnaTag';
 
     @Column('timestamptz')
     deleted_at!: Date;
+
+    @OneToOne(type => User)
+    @JoinColumn({ name: 'fk_user_id' })
+    user!: User;
 
     @OneToOne(type => QnaAggregation, aggregations => aggregations.qna)
     aggregations!: QnaAggregation;

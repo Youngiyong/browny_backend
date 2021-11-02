@@ -7,6 +7,7 @@ import QnaLike from '../entity/QnaLike';
 import QnaTag from '../entity/QnaTag';
 import { DeplResponse, DeplMsgResponse } from '../lib/response';
 import Tag from '../entity/Tag';
+import User from '../entity/User';
 
 
 export const postQnaLike = async (event: any, user_id: string) => {
@@ -70,6 +71,16 @@ export const deleteQnaLike = async (event: any, user_id: string) => {
     const pathParam = event.pathParameters
 
     try {
+        const qnaRepo = getRepository(Qna)
+        const qna = await qnaRepo.findOne({
+            where: {
+                id: pathParam.qna_id,
+                deleted_at: null
+            },
+        })
+        if(!qna) return DeplMsgResponse(404, "삭제되었거나 존재하지 않는 QNA입니다")
+        console.log(qna)
+
         //Qna Like Check
         const qnaLikeRepo = getRepository(QnaLike)
         const qnaAggreRepo = getRepository(QnaAggregation)
@@ -113,6 +124,16 @@ export const updateQnaViewCount = async (event: any, user_id: string) => {
     const pathParam = event.pathParameters
 
     try {
+        const qnaRepo = getRepository(Qna)
+        const qna = await qnaRepo.findOne({
+            where: {
+                id: pathParam.qna_id,
+                deleted_at: null
+            },
+        })
+        if(!qna) return DeplMsgResponse(404, "삭제되었거나 존재하지 않는 QNA입니다")
+        console.log(qna)
+
         //Qna User Check
         const qnaAggreRepo = getRepository(QnaAggregation)
         const qnaAggre = await qnaAggreRepo.findOne({
@@ -246,7 +267,7 @@ export const deleteQna = async (event: any, user_id: string) => {
         qna.updated_at = new Date();
         qna.deleted_at = new Date();
 
-        qnaRepo.save(qna)
+        await qnaRepo.save(qna)
 
         return DeplMsgResponse(200, "OK")
     } catch (e) {
@@ -372,16 +393,20 @@ export const getQna = async (event: any) => {
     
     const pathParam = event.pathParameters
 
+    const userRepo = await getRepository(User)
     const qnaRepo = getRepository(Qna)
+
+
     const qna = await qnaRepo.findOne({ 
         where: {
             id: pathParam.qna_id,
             deleted_at: null
         },
-        relations: ["aggregations", "comments", "tags", "likes"] });
+        relations: ["user", "user.profile", "aggregations", "comments", "tags", "likes"] });
 
     
     if(!qna) return DeplMsgResponse(404, "존재하지 않거나 삭제된 QNA입니다.")
+
     return DeplResponse(200, qna)
 }
 
@@ -395,7 +420,7 @@ export const findAllQna = async (event: any) => {
             where: {
                 deleted_at: null
             },
-           relations: ["aggregations", "comments", "tags", "likes"] });
+           relations: ["user", "user.profile", "aggregations", "comments", "tags", "likes"] });
 
     if(!qna) return DeplMsgResponse(404, "qna 정보가 없습니다.")
     return DeplResponse(200, qna)

@@ -1,4 +1,8 @@
 import AdminUser from './AdminUser';
+import Post from './Post';
+import PostComment from './PostComment';
+import PostLike from './PostLike';
+import PostTag from './PostTag';
 import QnaAggregation from './QnaAggregation';
 import QnaComment from './QnaComment';
 import QnaLike from './QnaLike';
@@ -21,7 +25,11 @@ const entities = [
   QnaLike,
   QnaComment,
   Qna,
-  Tag
+  Tag,
+  Post,
+  PostTag,
+  PostComment,
+  PostLike
 ];
 
 export default entities;

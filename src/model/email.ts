@@ -91,7 +91,7 @@ export const changePasswordCreateEmailCode = async (event: any) => {
     return DeplMsgResponse(200, "OK")
 }
 
-export const createEmailCode  =  async (payload: {}) => {
+export const createEmailCode  =  async (payload: any) => {
     
     // dynamodb에 email, code, count 정보를 등록한다.   
     payload.code = randomEmailCode()
@@ -210,7 +210,7 @@ export const updateEmailCode  =  async (event: any) => {
 
         
 
-export const findCodeByEmail  =  async (payload: {}) => {
+export const findCodeByEmail  =  async (payload: any) => {
 	
     const params = {
         TableName: process.env.EMAIL_AUTH,

@@ -46,8 +46,11 @@ export default class Post {
   @Column('uuid')
   fk_user_id!: string;
 
+  @Column({name : 'likes'})
+  likes_count!: number;
+
   @Column()
-  likes!: number;
+  views!: number;
 
   @Column('timestampz')
   @CreateDateColumn()
@@ -63,8 +66,8 @@ export default class Post {
   @OneToMany(type =>PostTag, tags => tags.post)
   tags!: PostTag[];
 
-  @OneToMany(type =>PostLike, post_likes => post_likes.post)
-  post_likes!: PostLike[];
+  @OneToMany(type =>PostLike, likes => likes.post)
+  likes!: PostLike[];
 
   @OneToMany(type =>PostComment, comments => comments.post)
   comments!: PostComment[];

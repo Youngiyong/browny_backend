@@ -33,6 +33,7 @@ export async function githubLoginEvent(event: any) {
       social_id: profile.id,
       provider: 'github',
       name: profile.login,
+      email: profile.email
     });
     return socialAccount;
   } catch (e) {
@@ -62,9 +63,10 @@ export async function googleLoginEvent(event: any) {
     console.log("profile", profile)
     // 기존 가입된 소셜정보가 있는지 확인한다. return user_id, jwt access token, refresh token return
     const socialAccount = await getSocialAccount({
-      profile,
+      name: profile.names![0].displayName || 'emptyname',
       social_id: profile.names[0].metadata.source.id,
       provider: 'google',
+      email: profile.emailAddresses![0].value 
     });
     console.log(socialAccount)
     return socialAccount;
@@ -98,6 +100,7 @@ export async function facebookLoginEvent(event: any) {
       social_id: profile.uid,
       name: profile.name,
       provider: 'facebook',
+      email: profile.email
     });
   } catch (e) {
     throw new Error("facebookLoginError:"+ e)
@@ -127,6 +130,7 @@ async function kakaoLoginEvent(event: any) {
       social_id: profile.id,
       name: profile.kakao_account.profile.nickname,
       provider: 'kakao',
+      email: profile.kakao_account.email
     });
   } catch (e) {
     throw new Error("kakaoLoginError:"+ e)

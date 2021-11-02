@@ -42,6 +42,6 @@ export async function getGithubProfile(accessToken: string) {
     auth: `Bearer ${accessToken}`
   });
   const { data } = await octokit.users.getAuthenticated();
-
+  console.log("github data", data)
   return data;
 }

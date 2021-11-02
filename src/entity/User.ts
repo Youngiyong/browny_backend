@@ -11,8 +11,7 @@ import { Entity,
     OneToMany
   } from 'typeorm';
 import { generateAccessToken, generateRefreshToken } from '../lib/token';
-import UserFollow from './UserFollow';
-
+import Qna from './Qnas';
 import UserProfile from './UserProfile';
 
 @Entity('users', {
@@ -47,9 +46,6 @@ export default class User {
   
   @OneToOne(type => UserProfile, profile => profile.user)
   profile!: UserProfile;
-
-  @OneToOne(type => UserFollow, follow => follow.user)
-  follow!: UserFollow;
 
   async generateUserToken() {
     // refresh token is valid for 30days

@@ -12,13 +12,13 @@
                     "title",
                     "fk_user_id",
                     "text",
+                    "thumnail",
                     "is_private",
                     "is_markdown",
                     "is_temp",
                     "created_at",
                     "updated_at",
                     "deleted_at",
-                    "aggregations",
                     "comments",
                     "tags",
                     "likes"
@@ -38,19 +38,23 @@
                     },
                     "text": {
                         "type": "string",
-                        "description": "qna 본문"
+                        "description": "post 본문"
+                    },
+                    "thumnail": {
+                        "type": "string",
+                        "description": "썸네일"
                     },
                     "is_private": {
                         "type": "boolean",
-                        "description": "qna 본문"
+                        "description": "공개 여부"
                     },
                     "is_markdown": {
                         "type": "boolean",
-                        "description": "qna 본문"
+                        "description": "마크다운 여부"
                     },
                     "is_temp": {
                         "type": "boolean",
-                        "description": "qna 본문"
+                        "description": "임시 저장 본문"
                     },
                     "created_at": {
                         "type": "string",
@@ -63,10 +67,6 @@
                     "deleted_at": {
                         "type": "string",
                         "description": "2020-11-25T09:13:42.000Z"
-                    },
-                    "aggregations": {
-                        "type": "object",
-                        "description": "id: ...., etc"
                     },
                     "comments": {
                         "type": "object",
