@@ -5,8 +5,10 @@ import {
     CreateDateColumn,
     ManyToOne,
     JoinColumn,
+    OneToOne,
   } from 'typeorm';
 import Post from './Post';
+import User from './User';
   
   @Entity('post_likes', {
     synchronize: false,
@@ -20,7 +22,11 @@ import Post from './Post';
   
     @Column('uuid')
     fk_user_id!: string;
-
+    
+    @OneToOne(type => User)
+    @JoinColumn({ name: 'fk_user_id' })
+    user!: User;
+    
     @Column('timestampz')
     @CreateDateColumn()
     created_at!: Date;

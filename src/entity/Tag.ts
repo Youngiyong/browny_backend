@@ -8,6 +8,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
+import PostTag from './PostTag';
 import QnaTag from './QnaTag';
 
 @Entity('tags', {
@@ -37,4 +38,5 @@ export default class Tag {
 
   @OneToOne(type => QnaTag)
   tag!: QnaTag;
+
 }

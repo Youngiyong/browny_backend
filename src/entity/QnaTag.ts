@@ -41,5 +41,6 @@ import Tag from './Tag';
     @OneToOne(type => Tag)
     @JoinColumn({ name: 'fk_tag_id' })
     tag!: Tag;
+
   }
   

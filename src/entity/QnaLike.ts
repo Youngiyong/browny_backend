@@ -5,8 +5,10 @@ import {
     CreateDateColumn,
     ManyToOne,
     JoinColumn,
+    OneToOne,
   } from 'typeorm';
 import Qna from './Qnas';
+import User from './User';
   
   @Entity('qna_likes', {
     synchronize: false,
@@ -20,6 +22,10 @@ import Qna from './Qnas';
   
     @Column('uuid')
     fk_user_id!: string;
+
+    @OneToOne(type => User)
+    @JoinColumn({ name: 'fk_user_id' })
+    user!: User;
 
     @Column('timestampz')
     @CreateDateColumn()

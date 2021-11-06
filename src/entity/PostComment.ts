@@ -6,8 +6,10 @@ import {
     UpdateDateColumn,
     JoinColumn,
     ManyToOne,
+    OneToOne,
   } from 'typeorm';
 import Post from './Post';
+import User from './User';
   
   @Entity('post_comments', {
     synchronize: false,
@@ -22,6 +24,10 @@ import Post from './Post';
     @Column('uuid')
     fk_user_id!: string;
 
+    @OneToOne(type => User)
+    @JoinColumn({ name: 'fk_user_id' })
+    comment_user!: User;
+    
     @Column('text')
     text!: string;
 

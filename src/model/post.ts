@@ -9,11 +9,28 @@ import { DeplResponse, DeplMsgResponse } from '../lib/response';
 
 export const writePostLike = async (event: any, user_id: string) => {
   
-  await connectDatabase();
+    const connection = new Database();
+    await connection.getConnection();
+    
+    const queryRunner = await getConnection().createQueryRunner();
+    await queryRunner.startTransaction();
   
-  const payload = JSON.parse(event.body);
+  
+    const payload = JSON.parse(event.body);
   
   try {
+
+        //Post Check
+        const postRepo = getRepository(Post)
+        const post = await postRepo.findOne({
+              where: {
+                  id: payload.post_id,
+                  deleted_at: null
+            },
+      })
+
+      if(!post) return DeplMsgResponse(404, "존재하지 않는 post입니다.")
+
       //Post Like Check
       const postLikeRepo = getRepository(PostLike)
       const postLike = await postLikeRepo.findOne({
@@ -29,13 +46,19 @@ export const writePostLike = async (event: any, user_id: string) => {
       console.log(payload.post_id, user_id)
       newPostLike.fk_post_id = payload.post_id
       newPostLike.fk_user_id = user_id
-      
-      await postLikeRepo.save(newPostLike)
 
+      post.likes_count += 1
+
+      await queryRunner.manager.save(post);
+      await queryRunner.manager.save(newPostLike)
+      await queryRunner.commitTransaction();
       return DeplMsgResponse(200, "OK")
 
     } catch (e) {
-      console.error(e)
+      await queryRunner.rollbackTransaction();
+      throw new Error("Invalid Error Message:"+ e)
+    } finally {
+        await queryRunner.release();
     }
 
 } 
@@ -86,7 +109,8 @@ export const updatePost = async (event: any, user_id: string) => {
       const post = await postRepo.findOne({
           where: {
               id: pathParam.post_id,
-              fk_user_id: user_id
+              fk_user_id: user_id,
+              deleted_at: null
           },
       })
       if(!post) return DeplMsgResponse(400, "Invalid Request Error")
@@ -172,7 +196,8 @@ export const deletePost = async (event: any, user_id: string) => {
       const post = await postRepo.findOne({
           where: {
               id: pathParam.post_id,
-              fk_user_id: user_id
+              fk_user_id: user_id,
+              deleted_at: null
           },
       })
       if(!post) return DeplMsgResponse(400, "Invalid Request Error")
@@ -307,8 +332,9 @@ export const findAllPost = async (event: any) => {
           where: {
               deleted_at: null
           },
-         relations: ["comments", "tags", "likes"] });
+          relations: ["user", "user.profile", "comments","tags", "tags.tag", "likes"] });
 
+  
   if(!post) return DeplMsgResponse(404, "post 정보가 없습니다.")
   return DeplResponse(200, post)
 }
@@ -325,7 +351,7 @@ export const getPost = async (event: any) => {
           id: pathParam.post_id,
           deleted_at: null
       },
-      relations: ["comments", "tags", "likes"] });
+      relations: ["user", "user.profile", "comments", "comments.comment_user", "comments.comment_user.profile","tags", "tags.tag", "likes", "likes.user", "likes.user.profile"] });
 
   
   if(!post) return DeplMsgResponse(404, "존재하지 않거나 삭제된 post입니다.")

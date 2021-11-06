@@ -39,7 +39,7 @@ export default class Post {
   @Column({ default: false })
   is_private!: boolean;
 
-  @OneToOne((type) => User, { cascade: true, eager: true })
+  @OneToOne((type) => User)
   @JoinColumn({ name: 'fk_user_id' })
   user!: User;
 

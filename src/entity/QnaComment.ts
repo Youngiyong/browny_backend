@@ -6,8 +6,10 @@ import {
     UpdateDateColumn,
     JoinColumn,
     ManyToOne,
+    OneToOne,
   } from 'typeorm';
 import Qna from './Qnas';
+import User from './User';
   
   @Entity('qna_comments', {
     synchronize: false,
@@ -21,6 +23,10 @@ import Qna from './Qnas';
   
     @Column('uuid')
     fk_user_id!: string;
+
+    @OneToOne(type => User)
+    @JoinColumn({ name: 'fk_user_id' })
+    comment_user!: User;
 
     @Column('text')
     text!: string;
