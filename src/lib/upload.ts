@@ -73,6 +73,7 @@ export const uploadCommonThumnailImage = async (folder: string, event: any) => {
 
 export const uploadCommonImage = async (folder: string, event: any) => {
     // generate s3 path
+    console.log("event," ,event)
     const uploadPath = generateCommonUploadPath(folder)+"/" + event.image.filename
     console.log("???",uploadPath)
     console.log(event.image)

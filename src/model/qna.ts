@@ -392,18 +392,23 @@ export const getQna = async (event: any) => {
     await connectDatabase();
     
     const pathParam = event.pathParameters
+    const qna = await getRepository(Qna)
+    .createQueryBuilder("qna")
+    .innerJoinAndSelect("qna.user", "user")
+    .innerJoinAndSelect("user.profile", "profile")
+    .innerJoinAndSelect("qna.aggregations", "aggregations")
+    .innerJoinAndSelect("qna.tags", "tags")
+    .innerJoinAndSelect("tags.tag", "tag")
+    .innerJoinAndSelect("qna.comments", "comments")
+    .innerJoinAndSelect("comments.comment_user", "comment_user")
+    .innerJoinAndSelect("comment_user.profile", "comment_user_profile")
+    .innerJoinAndSelect("qna.likes", "likes")
+    .innerJoinAndSelect("likes.user", "likes_user")
+    .innerJoinAndSelect("likes_user.profile", "likes_user_profile")
+    .where('qna.id = :id', { id: pathParam.qna_id, deleted_at: null })
+    .orderBy("comments.created_at", "ASC")
+    .getOne();
 
-    const userRepo = await getRepository(User)
-    const qnaRepo = getRepository(Qna)
-
-
-    const qna = await qnaRepo.findOne({ 
-        where: {
-            id: pathParam.qna_id,
-            deleted_at: null
-        },
-        relations: ["user", "user.profile", "aggregations", "comments", "comments.comment_user", "comments.comment_user.profile","tags", "tags.tag","likes", "likes.user", "likes.user.profile"] });
-    
     if(!qna) return DeplMsgResponse(404, "존재하지 않거나 삭제된 QNA입니다.")
 
     return DeplResponse(200, qna)
@@ -413,15 +418,21 @@ export const getQna = async (event: any) => {
 export const findAllQna = async (event: any) => {
     await connectDatabase();
 
-    const qnaRepo = getRepository(Qna)
-    const qna = await qnaRepo.find(
-        { 
-            where: {
-                deleted_at: null
-            },
-            relations: ["user", "user.profile", "aggregations", "comments", "tags", "tags.tag","likes", "likes.user", "likes.user.profile"] });
-
-    
+    const page = event.queryStringParameters === null || event.queryStringParameters.page === undefined 
+                ? 20 : event.queryStringParameters.page
+    const qna = await getRepository(Qna)
+    .createQueryBuilder("qna")
+    .leftJoinAndSelect("qna.user", "user")
+    .leftJoinAndSelect("user.profile", "profile")
+    .leftJoinAndSelect("qna.aggregations", "aggregations")
+    .leftJoinAndSelect("qna.tags", "tags")
+    .leftJoinAndSelect("tags.tag", "tag")
+    .leftJoinAndSelect("qna.comments", "comments")
+    .leftJoinAndSelect("qna.likes", "likes")
+    .take(page)
+    .where({deleted_at : null})
+    .orderBy("qna.created_at", "DESC")
+    .getMany();
     if(!qna) return DeplMsgResponse(404, "qna 정보가 없습니다.")
     return DeplResponse(200, qna)
 }
@@ -461,6 +472,40 @@ export const postQnaComment = async (event: any, user_id: string) => {
     }
 }
 
+export const HardDeleteQnaComment = async (event: any, user_id: string) => {
+    await connectDatabase();
+
+    const pathParam = event.pathParameters
+
+    try {
+        const commentRepo = getRepository(QnaComment)
+        const qnaRepo = getRepository(Qna)
+
+        const qna = await qnaRepo.findOne({
+            where: {
+                id: pathParam.qna_id,
+                deleted_at: null
+            },
+        })
+
+        if(!qna) return DeplMsgResponse(404, "존재하지 않거나 삭제된 QNA입니다.")
+
+        const comment = await commentRepo.findOne({
+            where: {
+                id : pathParam.comment_id,
+                fk_qna_id: pathParam.qna_id,
+                fk_user_id: user_id,
+                deleted_at: null
+            },
+        })
+        
+        await commentRepo.remove(comment)
+
+        return DeplMsgResponse(200, "OK")
+    } catch (e) {
+        console.error(e)
+    }
+}
 
 export const deleteQnaComment = async (event: any, user_id: string) => {
     await connectDatabase();

@@ -1,7 +1,7 @@
 import { Callback, Context, Handler } from 'aws-lambda';
 import { DeplMsgResponse } from '../../../lib/response';
 import { verifyAccessToken } from '../../../lib/token';
-import { deleteQna, updateQna, postQna, updateQnaViewCount, postQnaLike, deleteQnaLike, deleteQnaComment, putQnaComment, getQna, findAllQna, postQnaComment } from '../../../model/qna';
+import { deleteQna, updateQna, postQna, updateQnaViewCount, postQnaLike, deleteQnaLike, deleteQnaComment, HardDeleteQnaComment, putQnaComment, getQna, findAllQna, postQnaComment } from '../../../model/qna';
 
 
 export const getQnaHandler: Handler = async (
@@ -131,4 +131,17 @@ export const deleteQnaCommentHandler: Handler = async (
     const user_id =  verifyAccessToken(event);
     console.log(user_id)
     return user_id ? await deleteQnaComment(event, user_id): DeplMsgResponse(400, 'Invalid Access token Request');
+};
+
+
+
+export const HardDeleteQnaCommentHandler: Handler = async (
+  event: any,
+  context: Context,
+  callback: Callback
+) => {
+    context.callbackWaitsForEmptyEventLoop = false;
+    const user_id =  verifyAccessToken(event);
+    console.log(user_id)
+    return user_id ? await HardDeleteQnaComment(event, user_id): DeplMsgResponse(400, 'Invalid Access token Request');
 };
