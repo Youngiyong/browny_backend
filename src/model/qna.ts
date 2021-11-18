@@ -119,7 +119,7 @@ export const deleteQnaLike = async (event: any, user_id: string) => {
 } 
 
 
-export const updateQnaViewCount = async (event: any, user_id: string) => {
+export const updateQnaViewCount = async (event: any) => {
     await connectDatabase();
     const pathParam = event.pathParameters
 
@@ -394,17 +394,17 @@ export const getQna = async (event: any) => {
     const pathParam = event.pathParameters
     const qna = await getRepository(Qna)
     .createQueryBuilder("qna")
-    .innerJoinAndSelect("qna.user", "user")
-    .innerJoinAndSelect("user.profile", "profile")
-    .innerJoinAndSelect("qna.aggregations", "aggregations")
-    .innerJoinAndSelect("qna.tags", "tags")
-    .innerJoinAndSelect("tags.tag", "tag")
-    .innerJoinAndSelect("qna.comments", "comments")
-    .innerJoinAndSelect("comments.comment_user", "comment_user")
-    .innerJoinAndSelect("comment_user.profile", "comment_user_profile")
-    .innerJoinAndSelect("qna.likes", "likes")
-    .innerJoinAndSelect("likes.user", "likes_user")
-    .innerJoinAndSelect("likes_user.profile", "likes_user_profile")
+    .leftJoinAndSelect("qna.user", "user")
+    .leftJoinAndSelect("user.profile", "profile")
+    .leftJoinAndSelect("qna.aggregations", "aggregations")
+    .leftJoinAndSelect("qna.tags", "tags")
+    .leftJoinAndSelect("tags.tag", "tag")
+    .leftJoinAndSelect("qna.comments", "comments")
+    .leftJoinAndSelect("comments.comment_user", "comment_user")
+    .leftJoinAndSelect("comment_user.profile", "comment_user_profile")
+    .leftJoinAndSelect("qna.likes", "likes")
+    .leftJoinAndSelect("likes.user", "likes_user")
+    .leftJoinAndSelect("likes_user.profile", "likes_user_profile")
     .where('qna.id = :id', { id: pathParam.qna_id, deleted_at: null })
     .orderBy("comments.created_at", "ASC")
     .getOne();

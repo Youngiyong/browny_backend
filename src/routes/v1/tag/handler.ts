@@ -46,9 +46,7 @@ export const getTagHandler: Handler = async (
   callback: Callback
 ) => {
     context.callbackWaitsForEmptyEventLoop = false;
-    const user_id =  verifyAccessToken(event);
-    console.log(user_id)
-    return user_id ? await getTag(event): DeplMsgResponse(400, 'Invalid Access token Request');
+    return await getTag(event);
 };
 
 
@@ -58,7 +56,5 @@ export const getTagsHandler: Handler = async (
   callback: Callback
 ) => {
     context.callbackWaitsForEmptyEventLoop = false;
-    const user_id =  verifyAccessToken(event);
-    console.log(user_id)
-    return user_id ? await getTags(): DeplMsgResponse(400, 'Invalid Access token Request');
+    return await getTags();
 };

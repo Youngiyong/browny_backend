@@ -54,9 +54,7 @@ export const updateQnaViewCountHandler: Handler = async (
   callback: Callback
 ) => {
     context.callbackWaitsForEmptyEventLoop = false;
-    const user_id =  verifyAccessToken(event);
-    console.log(user_id)
-    return user_id ? await updateQnaViewCount(event, user_id): DeplMsgResponse(400, 'Invalid Access token Request');
+    return await updateQnaViewCount(event);
 };
 
 export const updateQnaHandler: Handler = async (
@@ -142,6 +140,8 @@ export const HardDeleteQnaCommentHandler: Handler = async (
 ) => {
     context.callbackWaitsForEmptyEventLoop = false;
     const user_id =  verifyAccessToken(event);
+
+
     console.log(user_id)
     return user_id ? await HardDeleteQnaComment(event, user_id): DeplMsgResponse(400, 'Invalid Access token Request');
 };
